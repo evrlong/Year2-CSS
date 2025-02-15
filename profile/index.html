@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/2b623f016d.js" crossorigin="anonymous"></script>
+    <title>Profile</title>
+    <link href="../css/style.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-blue-400 to-blue-900 h-auto flex flex-col items-center justify-center">
+    <!-- Navbar -->
+    <nav class="bg-blue-100 shadow-md p-1 relative min-w-full">
+        <div class="container mx-auto flex justify-between items-center px-4 ">
+            <img src="../img/logo.png" alt="logo" class="h-20 w-20 p-1">
+            <button id="menu-toggle" class="text-2xl text-gray-700 md:hidden">
+                ☰
+            </button>
+            <ul id="menu" class="hidden md:flex text-md text-gray-700 space-x-6 sticky top-0">
+                <li><a href="index.html" class="hover:text-blue-500  hover:underline">Profile</a></li>
+                <li><a href="../feed/index.html" class="hover:text-blue-500 hover:underline">Feed</a></li>
+                <li><a href="../index.html" class="hover:text-blue-500 hover:underline">Log out</a></li>
+            </ul>
+        </div>
+
+        <!-- Mobilmeny -->
+        <ul id="mobile-menu"
+            class=" hidden absolute left-0 top-full w-full bg-blue-100 shadow-md flex-col text-gray-700 text-center space-y-4 p-2 p-4 pb-8 md:hidden ">
+            <li><a href="/profile/index.html" class="block p-2 hover:bg-blue-200 flex justify-center flex-col"><i
+                        class="fa-solid fa-user text-xs text-green-400 drop-shadow"></i>Profile</a></li>
+            <li><a href="/feed/index.html" class="block p-2 hover:bg-blue-200 flex justify-center flex-col"><i
+                        class="fa-solid fa-rss text-xs text-green-400 drop-shadow"></i>Feed</a></li>
+            <li><a href="/index.html" class="block p-2 hover:bg-blue-200 flex justify-center flex-col"><i
+                        class="fa-solid fa-right-from-bracket text-xs text-red-400 drop-shadow"></i>Log Out</a></li>
+
+        </ul>
+    </nav>
+    <main class="container flex justify-center flex-col sm:flex-row h-full p-8">
+        <!-- Left column(profile)-->
+        <div class="bg-blue-100 flex flex-col p-8 shadow-md rounded-lg h-full">
+            <img src="../img/profilepic.png" alt="profile picture of John Doe"
+                class="rounded-full h-40 w-40 mx-auto object-cover ring-2 ring-green-500">
+            <h2 class="text-xl font-bold text-center pt-4">John Doe</h2>
+            <p class="text-center text-gray-700 pb-4">@Johnd0e123</p>
+            <div class=" bg-blue-600 justify-center flex flex-row ">
+                <div class="bg-blue-100 p-4 shadow-md flex-1">
+                    <div class="text-center font-bold"> 9</div>
+                    Posts
+                </div>
+                <div class="bg-blue-100 p-4 shadow-md flex-1">
+                    <div class="text-center font-bold"> 1.2k</div>
+                    Followers
+
+                </div>
+
+            </div>
+            <!-- Followbutton-->
+            <button class="p-4 bg-blue-600 my-2 shadow-md hover:bg-green-600 "> Follow</button>
+
+            <!-- Followers -->
+            <h1 class="text-l font-bold text-center pt-6 pb-2 text-gray-700 w-full">Followers</h1>
+
+            <div class="grid grid-cols-3 gap-2">
+                <img src="../img/profile/man4.png" alt="Profile picture of older man smiling"
+                    class="bg-blue-100 shadow-md rounded-lg h-10 w-10 mx-auto object-cover">
+                <img src="../img/profile/man1.png" alt="Profile picture of man curly brown hair"
+                    class="bg-blue-100 shadow-md rounded-lg h-10 w-10 mx-auto object-cover">
+                <img src="../img/profile/woman1.png" alt="Profile picture of woman with long brown hair"
+                    class="bg-blue-100 shadow-md rounded-lg h-10 w-10 mx-auto object-cover">
+                <img src="../img/profile/man2.png" alt="Profile picture of man with blond hair"
+                    class="bg-blue-100 shadow-md rounded-lg h-10 w-10 mx-auto object-cover">
+                <img src="../img/profile/woman2.png" alt="Profile picture of brown hair"
+                    class="bg-blue-100 shadow-md rounded-lg h-10 w-10 mx-auto object-cover">
+                <img src="../img/profile/man3.png" alt="Profile picture of man with blond hair"
+                    class="bg-blue-100 shadow-md rounded-lg h-10 w-10 mx-auto object-cover">
+                <img src="../img/profile/woman3.png" alt="Profile picture of woman with blond hair"
+                    class="bg-blue-100 shadow-md rounded-lg h-10 w-10 mx-auto object-cover">
+                <img src="../img/profile/man5.png" alt="Profile picture of man with red hair"
+                    class="bg-blue-100 shadow-md rounded-lg h-10 w-10 mx-auto object-cover">
+                <img src="../img/profile/woman4.png" alt="Profile picture of older woman with medium hair"
+                    class="bg-blue-100 shadow-md rounded-lg h-10 w-10 mx-auto object-cover">
+            </div>
+
+        </div>
+
+        <!-- Right column(activty) -->
+        <div class=" bg-blue-100 flex flex-wrap shadow-md rounded-lg h-auto justify-center xl:justify-between  p-4 xs:p-8 sm:mt-0 mt-10
+                sm:ml-10 min-w-min">
+            <h1 class="text-l font-bold text-center py-2 text-gray-700 w-full">Activity</h1>
+
+            <div class="bg-white min-h-52 w-140 m-4 shadow-md rounded-lg w-60">
+                <div class="bg-white rounded-t-md p-2 flex justify-between items-center text-xs">
+                    <img src="../img/profilepic.png" alt="profile picture of John Doe"
+                        class="bg-blue-100 shadow-md rounded-full h-7 w-7 object-cover">
+                    05.08.2025
+                </div>
+                <img src="../img/feets.jpg" alt="Picture of my feets while enjoying a view after a hiking trip"
+                    class=" h-40 w-full w-3 mx-auto object-cover ring-green-500">
+                <div class="bg-white py-1 rounded-b-md">
+                    <div>
+                        <i class="fa-solid fa-heart fa-sm px-0.5 pl-4 text-red-600"></i>
+                        <i class="fa-regular fa-comment fa-sm px-0.5"></i>
+                        <div class="flex flex-row">
+                            <p class="text-[12px] px-0.5 py-1 pl-4"><span
+                                    class=" pr-1 font-bold">@Johnd0e123:</span>Lorem
+                                ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                                in aliquam odio. Suspendisse et turpis at turpis sagittis sagittis. Donec semper tellus
+                                et tortor dictum efficitur.</p>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white min-h-52 w-140 m-4 shadow-md rounded-lg w-60">
+                <div class="bg-white rounded-t-md p-2 flex justify-between items-center text-xs">
+                    <img src="../img/profilepic.png" alt="profile picture of John Doe"
+                        class="bg-blue-100 shadow-md rounded-full h-7 w-7 object-cover">
+                    23.07.2025
+                </div>
+                <img src="../img/hiking.jpeg" alt="Picture of a person hiking in the mountains"
+                    class=" h-40 w-full w-3 mx-auto object-cover ring-green-500">
+                <div class="bg-white py-1 rounded-b-md">
+                    <i class="fa-regular fa-heart fa-sm px-0.5 pl-4 "></i>
+                    <i class="fa-regular fa-comment fa-sm px-0.5"></i>
+                    <div class="flex flex-row">
+                        <p class="text-[12px] px-0.5 py-1 pl-4"><span class=" pr-1 font-bold">@Johnd0e123:</span>Lorem
+                            ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                            in aliquam odio. Suspendisse et turpis at turpis sagittis sagittis. Donec semper tellus
+                            et tortor dictum efficitur.</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white min-h-52 w-140 m-4 shadow-md rounded-lg w-60">
+                <div class="bg-white rounded-t-md p-2 flex justify-between items-center text-xs">
+                    <img src="../img/profilepic.png" alt="profile picture of John Doe"
+                        class="bg-blue-100 shadow-md rounded-full h-7 w-7 object-cover">
+                    11.07.2024
+                </div>
+                <img src="../img/beer.png" alt="Picture of a pint with beer standing on a table"
+                    class=" h-40 w-full w-3 mx-auto object-cover ring-green-500">
+                <div class="bg-white py-1 rounded-b-md">
+                    <i class="fa-solid fa-heart fa-sm px-0.5 pl-4 text-red-600"></i>
+                    <i class="fa-regular fa-comment fa-sm px-0.5"></i>
+                    <div class="flex flex-row">
+                        <p class="text-[12px] px-0.5 py-1 pl-4"><span class=" pr-1 font-bold">@Johnd0e123:</span>Lorem
+                            ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                            in aliquam odio. Suspendisse et turpis at turpis sagittis sagittis. Donec semper tellus
+                            et tortor dictum efficitur.</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white min-h-52 w-140 m-4 shadow-md rounded-lg w-60">
+                <div class="bg-white rounded-t-md p-2 flex justify-between items-center text-xs">
+                    <img src="../img/profilepic.png" alt="profile picture of John Doe"
+                        class="bg-blue-100 shadow-md rounded-full h-7 w-7 object-cover">
+                    07.07.2024
+                </div>
+                <img src="../img/bakst.png" alt="picture of a cake I baked"
+                    class=" h-40 w-full w-3 mx-auto object-cover ring-green-500">
+                <div class="bg-white py-1 rounded-b-md">
+                    <i class="fa-solid fa-heart fa-sm px-0.5 pl-4 text-red-600"></i>
+                    <i class="fa-regular fa-comment fa-sm px-0.5"></i>
+                    <div class="flex flex-row">
+                        <p class="text-[12px] px-0.5 py-1 pl-4"><span class=" pr-1 font-bold">@Johnd0e123:</span>Lorem
+                            ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                            in aliquam odio. Suspendisse et turpis at turpis sagittis sagittis. Donec semper tellus
+                            et tortor dictum efficitur.</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white min-h-52 w-140 m-4 shadow-md rounded-lg w-60">
+                <div class="bg-white rounded-t-md p-2 flex justify-between items-center text-xs">
+                    <img src="../img/profilepic.png" alt="profile"
+                        class="bg-blue-100 shadow-md rounded-full h-7 w-7 object-cover">
+                    18.05.2024
+                </div>
+                <img src="../img/elephant.png" alt="Picture of a elephant in the savannah"
+                    class=" h-40 w-full w-3 mx-auto object-cover ring-green-500">
+                <div class="bg-white py-1 rounded-b-md">
+                    <i class="fa-regular fa-heart fa-sm px-0.5 pl-4 "></i>
+                    <i class="fa-regular fa-comment fa-sm px-0.5"></i>
+                    <div class="flex flex-row">
+                        <p class="text-[12px] px-0.5 py-1 pl-4"><span class=" pr-1 font-bold">@Johnd0e123:</span>Lorem
+                            ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                            in aliquam odio. Suspendisse et turpis at turpis sagittis sagittis. Donec semper tellus
+                            et tortor dictum efficitur.</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white min-h-52 w-140 m-4 shadow-md rounded-lg w-60">
+                <div class="bg-white rounded-t-md p-2 flex justify-between items-center text-xs">
+                    <img src="../img/profilepic.png" alt="profile picture of John Doe"
+                        class="bg-blue-100 shadow-md rounded-full h-7 w-7 object-cover">
+                    06.03.2024
+                </div>
+                <img src="../img/lady.png" alt="A picture of a woman with brown hair staring into the camera"
+                    class=" h-40 w-full w-3 mx-auto object-cover ring-green-500">
+                <div class="bg-white py-1 rounded-b-md">
+                    <i class="fa-solid fa-heart fa-sm px-0.5 pl-4 text-red-600"></i>
+                    <i class="fa-regular fa-comment fa-sm px-0.5"></i>
+                    <div class="flex flex-row">
+                        <p class="text-[12px] px-0.5 py-1 pl-4"><span class=" pr-1 font-bold">@Johnd0e123:</span>Lorem
+                            ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                            in aliquam odio. Suspendisse et turpis at turpis sagittis sagittis. Donec semper tellus
+                            et tortor dictum efficitur.</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white min-h-52 w-140 m-4 shadow-md rounded-lg w-60">
+                <div class="bg-white rounded-t-md p-2 flex justify-between items-center text-xs">
+                    <img src="../img/profilepic.png" alt="profile picture of John Doe"
+                        class="bg-blue-100 shadow-md rounded-full h-7 w-7 object-cover">
+                    26.02.2024
+                </div>
+                <img src="../img/skiing.png" alt="Picture of my friend skiing down the mountain"
+                    class=" h-40 w-full w-3 mx-auto object-cover ring-green-500">
+                <div class="bg-white py-1 rounded-b-md">
+                    <i class="fa-regular fa-heart fa-sm px-0.5 pl-4 "></i>
+                    <i class="fa-regular fa-comment fa-sm px-0.5"></i>
+                    <div class="flex flex-row">
+                        <p class="text-[12px] px-0.5 py-1 pl-4"><span class=" pr-1 font-bold">@Johnd0e123:</span>Lorem
+                            ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                            in aliquam odio. Suspendisse et turpis at turpis sagittis sagittis. Donec semper tellus
+                            et tortor dictum efficitur.</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white min-h-52 w-140 m-4 shadow-md rounded-lg w-60">
+                <div class="bg-white rounded-t-md p-2 flex justify-between items-center text-xs">
+                    <img src="../img/profilepic.png" alt="profile picture of John Doe"
+                        class="bg-blue-100 shadow-md rounded-full h-7 w-7 object-cover">
+                    01.04.2024
+                </div>
+                <img src="../img/skive.png" alt="picture of a weird square shaped pizza I made"
+                    class=" h-40 w-full w-3 mx-auto object-cover ring-green-500">
+                <div class="bg-white py-1 rounded-b-md">
+                    <i class="fa-solid fa-heart fa-sm px-0.5 pl-4 text-red-600"></i>
+                    <i class="fa-regular fa-comment fa-sm px-0.5"></i>
+                    <div class="flex flex-row">
+                        <p class="text-[12px] px-0.5 py-1 pl-4"><span class=" pr-1 font-bold">@Johnd0e123:</span>Lorem
+                            ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                            in aliquam odio. Suspendisse et turpis at turpis sagittis sagittis. Donec semper tellus
+                            et tortor dictum efficitur.</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white min-h-52 w-140 m-4 shadow-md rounded-lg w-60">
+                <div class="bg-white rounded-t-md p-2 flex justify-between items-center text-xs">
+                    <img src="../img/profilepic.png" alt="profile picture of John Doe"
+                        class="bg-blue-100 shadow-md rounded-full h-7 w-7 object-cover">
+                    11.02.2024
+                </div>
+                <img src="../img/concerts.png" alt="Photo from my point view during a big concert"
+                    class=" h-40 w-full w-3 mx-auto object-cover ring-green-500">
+                <div class="bg-white py-1 rounded-b-md">
+                    <i class="fa-solid fa-heart fa-sm px-0.5 pl-4 text-red-600"></i>
+                    <i class="fa-regular fa-comment fa-sm px-0.5"></i>
+                    <div class="flex flex-row">
+                        <p class="text-[12px] px-0.5 py-1 pl-4"><span class=" pr-1 font-bold">@Johnd0e123:</span>Lorem
+                            ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                            in aliquam odio. Suspendisse et turpis at turpis sagittis sagittis. Donec semper tellus
+                            et tortor dictum efficitur.</p>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            </container>
+
+    </main>
+</body>
+
+</html>
