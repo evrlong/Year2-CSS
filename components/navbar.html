@@ -1,0 +1,97 @@
+<!doctype html>
+
+<nav class="bg-blue-100 shadow-md p-1 relative min-w-full">
+  <div class="container mx-auto flex justify-between items-center px-4">
+    <img src="../img/logo.png" alt="logo" class="h-20 w-20 p-1" />
+    <button id="menu-toggle" class="text-2xl text-gray-700 md:hidden">
+      ☰
+    </button>
+    <ul
+      id="menu"
+      class="hidden md:flex text-md text-gray-700 space-x-6 sticky top-0"
+    >
+      <li>
+        <a
+          href="../profile/index.html"
+          class="hover:text-blue-500 hover:underline"
+          id="profile-link"
+        >
+          Profile
+        </a>
+      </li>
+      <li>
+        <a href="../feed/index.html" class="hover:text-blue-500" id="feed-link">
+          Feed
+        </a>
+      </li>
+
+      <li id="auth-link">
+        <a
+          href="../index.html"
+          class="hover:text-blue-500 hover:underline"
+          id="auth-link-text"
+        >
+          Log in
+        </a>
+      </li>
+      <li>
+        <a
+          href="../register/index.html"
+          class="hover:text-blue-500"
+          id="register-link"
+        >
+          Register
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Mobilmeny -->
+  <ul
+    id="mobile-menu"
+    class="hidden absolute left-0 top-full w-full bg-blue-100 shadow-md flex-col text-gray-700 text-center space-y-4 p-2 p-4 pb-8 md:hidden"
+  >
+    <li>
+      <a
+        href="../profile/index.html"
+        class="p-2 hover:bg-blue-200 flex justify-center flex-col"
+        id="mobile-profile-link"
+      >
+        <i class="fa-solid fa-user text-xs text-green-400 drop-shadow"></i>
+        Profile
+      </a>
+    </li>
+    <li>
+      <a
+        href="../feed/index.html"
+        class="p-2 hover:bg-blue-200 flex justify-center flex-col"
+        id="mobile-feed-link"
+      >
+        <i class="fa-solid fa-rss text-xs text-green-400 drop-shadow"></i>
+        Feed
+      </a>
+    </li>
+    <li>
+      <a
+        href="../index.html"
+        class="p-2 hover:bg-blue-200 flex justify-center flex-col"
+        id="mobile-auth-link"
+      >
+        <i
+          class="fa-solid fa-right-from-bracket text-xs text-red-400 drop-shadow"
+        ></i>
+        Log Out
+      </a>
+    </li>
+    <li>
+      <a
+        href="../register/index.html"
+        class="p-2 hover:bg-blue-200 flex justify-center flex-col"
+        id="mobile-register-link"
+      >
+        <i class="fa-solid fa-rss text-xs text-green-400 drop-shadow"></i>
+        Register
+      </a>
+    </li>
+  </ul>
+</nav>
