@@ -1,14 +1,23 @@
 // api
-import { postUrl, singleProfileUrl } from './api.js';
+import {
+  getPostUrl,
+  singleProfileUrl,
+  defaultProfileParams,
+  defaultPostParams,
+} from './api.js';
 import { getDefaultHeaders } from './config.js';
 
 // utils
 import { renderProfileData } from '../utils/render.js';
+import { renderFeedPosts } from '../utils/render.js';
 import { createProfileCard } from '../utils/dom/profileposts.js';
 
-export async function fetchFeedPosts() {
+export async function fetchFeedPosts(limit, page) {
+  const url = getPostUrl({ limit, page });
+  console.log('Fetching posts from:', url);
+
   try {
-    const response = await fetch(postUrl, {
+    const response = await fetch(url, {
       method: 'GET',
       headers: getDefaultHeaders(),
     });
@@ -18,20 +27,28 @@ export async function fetchFeedPosts() {
     }
 
     const posts = await response.json();
-    console.log('Fetched posts:', posts); // Log the fetched posts
-    return posts.data || []; // ✅ Returnér array direkte
+    return posts.data || [];
   } catch (error) {
     console.error('Error fetching feed posts:', error);
-    return []; // Returnér tomt array ved feil
+    return [];
   }
 }
+
+// Fetch user profile data
+
+// fetch user profile data
 const profileImage = document.getElementById('profileImg');
 const profileUsername = document.getElementById('username');
 const profileEmail = document.getElementById('email');
 
+// Function to fetch user profile data
 export async function fetchUserProfile(userId) {
+  // Lag querystring av defaultProfileParams
+  const queryString = new URLSearchParams(defaultProfileParams).toString();
+  const url = `${singleProfileUrl}/${userId}?${queryString}`;
+
   try {
-    const response = await fetch(`${singleProfileUrl}/${userId}`, {
+    const response = await fetch(url, {
       method: 'GET',
       headers: getDefaultHeaders(),
     });
@@ -43,10 +60,9 @@ export async function fetchUserProfile(userId) {
     const data = await response.json();
     console.log('Profile data:', data);
 
-    // Default email if none provided
-    renderProfileData(data.data, profileImage, profileUsername, profileEmail); // Render profile data into UI elements
+    // Du kan bruke counts og annen info her
+    renderProfileData(data.data, profileImage, profileUsername, profileEmail);
 
-    // Debugging log for profile data
     return data;
   } catch (error) {
     console.error('Error fetching user profile:', error);
@@ -54,9 +70,14 @@ export async function fetchUserProfile(userId) {
   }
 }
 
+// fetch user posts
 export async function fetchUserPosts(userId) {
+  // add extra parameters to the URL if needed
+  const queryString = new URLSearchParams(defaultPostParams).toString();
+  const url = `${singleProfileUrl}/${userId}/posts?${queryString}`;
+
   try {
-    const response = await fetch(`${singleProfileUrl}/${userId}/posts`, {
+    const response = await fetch(url, {
       method: 'GET',
       headers: getDefaultHeaders(),
     });
@@ -76,9 +97,8 @@ export async function fetchUserPosts(userId) {
     );
 
     console.log('User posts data:', data); // Debugging log for user posts
-    renderProfilePosts(data.data || []); // Render posts into the feed
-    console.log('Posts:', data); // Debugging log for posts
-    return data;
+    renderFeedPosts(data.data || []); // Render posts into the feed
+    console.log('data.dat:', data.data);
   } catch (error) {
     console.error('Error fetching user posts:', error);
     return [];

@@ -26,10 +26,14 @@ async function login(url, data) {
     const result = await response.json();
     const accessToken = result.data.accessToken;
     const profileData = result.data;
+
     localStorage.setItem('profileData', JSON.stringify(profileData));
     localStorage.setItem('accessToken', accessToken);
     // Redirect to the home page after successful login
-    window.location.href = '/profile/index.html';
+    const user = localStorage.getItem('accessToken'); // Sjekk om brukeren er logget inn
+    const payload = JSON.parse(atob(user.split('.')[1]));
+    const username = payload.name;
+    window.location.href = `../viewprofile/index.html?user=${username}`;
     return result;
   } catch (error) {
     console.error('Error:', error);

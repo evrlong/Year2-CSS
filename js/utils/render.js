@@ -1,4 +1,4 @@
-// Render profile data into 3 UI elements: image, username, and email
+//dom
 import { createPostCard } from './dom/postcard.js';
 
 export function renderProfileData(
@@ -11,6 +11,7 @@ export function renderProfileData(
     imageElement.src = data.avatar?.url || 'default-profile.png';
     usernameElement.textContent = data.name || 'No username available';
     emailElement.textContent = data.email || 'No email available';
+    console.log('Profile data rendered:', data);
   } else {
     console.error('No profile data found');
   }

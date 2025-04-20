@@ -8,3 +8,5 @@ export function getDefaultHeaders() {
     'x-Noroff-API-key': apiKey,
   };
 }
+
+export const defaultHeaders = getDefaultHeaders();

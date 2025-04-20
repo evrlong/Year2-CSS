@@ -85,8 +85,51 @@
                 class="form-input mt-1 block w-full rounded border-gray-300"
               />
             </div>
-
+            <div id="selectAvatar mb-4"></div>
+            <label
+              for="avatar"
+              class="block text-sm font-medium text-gray-700 p-2"
+            >
+              Select Avatar
+            </label>
+            <div
+              id="avatar-selection"
+              class="flex flex-row justify-center items-center"
+            >
+              <img
+                src="https://raw.githubusercontent.com/evrlong/Year2-CSS/js2/img/avatars/catavatar.png"
+                data-avatar-url="https://raw.githubusercontent.com/evrlong/Year2-CSS/js2/img/avatars/catavatar.png"
+                alt="Avatar"
+                class="avatar rounded-full w-20 h-20 mx-auto mb-4 p-2 cursor-pointer"
+                id="catAvatar"
+              />
+              <img
+                src="https://raw.githubusercontent.com/evrlong/Year2-CSS/js2/img/avatars/pandaavatar.png"
+                data-avatar-url="https://raw.githubusercontent.com/evrlong/Year2-CSS/js2/img/avatars/pandaavatar.png
+                "
+                alt="Avatar"
+                class="avatar rounded-full w-20 h-20 mx-auto mb-4 p-2 cursor-pointer"
+                id="pandaAvatar"
+              />
+              <img
+                src="https://raw.githubusercontent.com/evrlong/Year2-CSS/js2/img/avatars/foxavatar.png"
+                data-avatar-url="https://raw.githubusercontent.com/evrlong/Year2-CSS/js2/img/avatars/foxavatar.png"
+                alt="Avatar"
+                class="avatar rounded-full w-20 h-20 mx-auto mb-4 p-2 cursor-pointer"
+                id="foxAvatar"
+              />
+            </div>
+            <input
+              type="hidden"
+              name="avatar"
+              id="avatar"
+              value="https://raw.githubusercontent.com/evrlong/Year2-CSS/js2/img/avatars/catavatar.png"
+            />
             <div class="mt-12 text-center">
+              <div
+                id="form-message"
+                class="hidden text-center py-2 font-semibold"
+              ></div>
               <button
                 id="register-button"
                 type="submit"

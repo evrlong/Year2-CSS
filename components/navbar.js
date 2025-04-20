@@ -56,9 +56,18 @@ function updateNavbar() {
   const mobileRegisterLink = document.getElementById('mobile-register-link');
 
   if (user) {
+    const payload = JSON.parse(atob(user.split('.')[1]));
+    const username = payload.name;
+
+    // Oppdater profil-lenker med brukernavn som query-param
+    if (profileLink)
+      profileLink.href = `../viewprofile/index.html?user=${username}`;
+    if (mobileProfileLink)
+      mobileProfileLink.href = `../viewprofile/index.html?user=${username}`;
+
     // Endre navbar for autentiserte brukere
     document.getElementById('auth-link-text').textContent = 'Log out';
-    document.getElementById('auth-link').href = '#'; //
+    document.getElementById('auth-link').href = '#';
     document.getElementById('mobile-auth-link').textContent = 'Log out';
 
     // Vis relevante lenker for autentiserte brukere
