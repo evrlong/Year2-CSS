@@ -1,90 +1,81 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOME || login</title>
+    <link href="css/style.css" rel="stylesheet" />
+    <link rel="icon" href="img/favicon_io/favicon.ico" type="image/x-icon" />
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flex Layout</title>
-    <link href="css/style.css" rel="stylesheet">
-    <link rel="icon" href="img/favicon_io/favicon.ico" type="image/x-icon">
-</head>
+  <body class="bg-gradient-to-br from-blue-400 to-blue-900">
+    <header>
+      <div id="navbar-container"></div>
+    </header>
 
-<body class="bg-gradient-to-br from-blue-400 to-blue-900 h-screen">
-    <!-- Navbar -->
-    <nav class="bg-blue-100 shadow-md p-1 relative min-w-full">
-        <div class="container mx-auto flex justify-between items-center px-4 ">
-            <img src="../img/logo.png" alt="logo" class="h-20 w-20 p-1">
-            <button id="menu-toggle" class="text-2xl text-gray-700 md:hidden">
-                ☰
-            </button>
-            <ul id="menu" class="hidden md:flex text-md text-gray-700 space-x-6 sticky top-0">
-                <li><a href="/profile/index.html" class="hover:text-blue-500  hover:underline">Profile</a></li>
-                <li><a href="/feed/index.html" class="hover:text-blue-500 hover:underline">Feed</a></li>
-                <li><a href="index.html" class="hover:text-blue-500 hover:underline">Log In</a></li>
-            </ul>
-        </div>
-
-        <!-- Mobilmeny -->
-        <ul id="mobile-menu"
-            class=" hidden absolute left-0 top-full w-full bg-blue-100 shadow-md flex-col text-gray-700 text-center space-y-4 p-2 p-4 pb-8 md:hidden ">
-            <li><a href="/profile/index.html" class="block p-2 hover:bg-blue-200 flex justify-center flex-col"><i
-                        class="fa-solid fa-user text-xs text-green-400 drop-shadow"></i>Profile</a></li>
-            <li><a href="/feed/index.html" class="block p-2 hover:bg-blue-200 flex justify-center flex-col"><i
-                        class="fa-solid fa-rss text-xs text-green-400 drop-shadow"></i>Feed</a></li>
-            <li><a href="/index.html" class="block p-2 hover:bg-blue-200 flex justify-center flex-col"><i
-                        class="fa-solid fa-right-from-bracket text-xs text-red-400 drop-shadow"></i>Log Out</a></li>
-
-        </ul>
-    </nav>
-    <div class="container flex justify-center items-center h-full">
+    <main class="flex justify-center items-center w-full h-screen">
+      <div class="container flex justify-center items-center w-full h-full">
         <div class="bg-blue-100 flex flex-col p-8 rounded-lg shadow-lg">
-            <h1 class="text-xl font-bold text-center pb-12 pt-2 text-gray-700">Create new account</h1>
-            <form action="/profile/index.html" method="POST">
-                <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" name="email" id="email"
-                        class="form-input mt-1 block w-full rounded border-gray-300 " required />
-                </div>
-                <div class="mb-4">
-                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                    <input type="text" name="username" id="username"
-                        class="form-input mt-1 block w-full rounded border-gray-300 shadow-lg" required />
-                </div>
-                <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-gray-700">First Name</label>
-                    <input type="text" name="name" id="name"
-                        class="form-input mt-1 block w-full rounded border-gray-300" required />
-                </div>
-                <div class="mb-4">
-                    <label for="lastName" class="block text-sm font-medium text-gray-700">Last name</label>
-                    <input type="text" name="LastName" id="LastName"
-                        class="form-input mt-1 block w-full rounded border-gray-300" required />
-                </div>
-                <div class="mb-4">
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" name="password" id="password" minlength="8" required
-                        class="form-input mt-1 block w-full rounded border-gray-300" />
-                </div>
+          <h1 class="text-xl font-bold text-center pb-8 pt-2 text-gray-700">
+            Log in
+          </h1>
+          <form action="/profile/index.html" method="POST">
+            <div class="mb-4">
+              <label
+                for="username"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Email
+              </label>
+              <input
+                type="text"
+                name="Email"
+                id="email"
+                class="form-input mt-1 block w-full rounded border-gray-300 shadow-lg"
+                required
+              />
+            </div>
 
-                <div class="mb-4">
-                    <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirm
-                        Password</label>
-                    <input type="password" name="confirm-password" id="confirm-password" minlength="8" required
-                        class="form-input mt-1 block w-full rounded border-gray-300" />
-                </div>
+            <div class="mb-4">
+              <label
+                for="password"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                minlength="8"
+                required
+                class="form-input mt-1 block w-full rounded border-gray-300"
+              />
+            </div>
 
-                <div class="mt-12 text-center">
-                    <button type="submit" href="/profile/index.html"
-                        class="bg-green-600 hover:bg-green-500 hover:shadow-xl hover:underline  text-white font-bold py-2 px-4 rounded">
-                        Create account
-                    </button>
-                </div>
-            </form>
-
+            <div class="mt-8 text-center flex flex-col items-start">
+              <button
+                id="login-button"
+                type="submit"
+                class="bg-green-600 hover:bg-green-500 hover:shadow-xl hover:underline text-white font-bold py-2 px-4 rounded"
+              >
+                Login
+              </button>
+              <div class="mt-4 flex flex-col text-sm text-gray-700 items-start">
+                <p>Don't have an account?</p>
+                <a
+                  href="/register/index.html"
+                  class="text-blue-600 hover:text-blue-500 hover:underline"
+                >
+                  Create an account
+                </a>
+              </div>
+            </div>
+          </form>
         </div>
-
-
-
-
-    </div>
-</body>
+      </div>
+    </main>
+  </body>
+  <script src="js/script.js" type="module"></script>
+  <script src="js/auth/login.js" type="module"></script>
+</html>

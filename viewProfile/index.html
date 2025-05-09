@@ -7,9 +7,8 @@
       src="https://kit.fontawesome.com/2b623f016d.js"
       crossorigin="anonymous"
     ></script>
-    <title>Feed</title>
+    <title>SOME | PROFILE</title>
     <link href="../css/style.css" rel="stylesheet" />
-    <link rel="icon" href="img/favicon_io/favicon.ico" type="image/x-icon" />
   </head>
 
   <body class="bg-gradient-to-br from-blue-400 to-blue-900 min-h-screen">
@@ -17,8 +16,54 @@
       <!-- Navbar.html -->
       <div id="navbar-container"></div>
     </header>
-    <main class="container flex justify-center flex-col sm:flex-row h-full p-8">
-      <!-- Hidden popups -->
+    <main
+      id="profileContainer"
+      class="container flex justify-center flex-col sm:flex-row p-8"
+    >
+      <!-- Left column(profile)-->
+      <div class="bg-blue-100 flex flex-col p-8 shadow-md rounded-lg h-full">
+        <img
+          id="profileImg"
+          class="rounded-full h-40 w-40 mx-auto object-cover ring-2 ring-green-500"
+        />
+        <h2 id="username" class="text-xl font-bold text-center pt-4"></h2>
+        <p id="email" class="text-center text-gray-700 pb-4"></p>
+        <div class="bg-blue-600 justify-center flex flex-row">
+          <div class="bg-blue-100 p-4 shadow-md flex-1">
+            <div class="text-center font-bold">9</div>
+            Posts
+          </div>
+          <div class="bg-blue-100 p-4 shadow-md flex-1">
+            <div class="text-center font-bold">1.2k</div>
+            Followers
+          </div>
+        </div>
+        <!-- Followbutton-->
+        <button class="p-4 bg-blue-600 my-2 shadow-md hover:bg-green-600">
+          Follow
+        </button>
+
+        <!-- Followers -->
+        <h1 class="text-l font-bold text-center pt-6 pb-2 text-gray-700 w-full">
+          Followers
+        </h1>
+
+        <div class="grid grid-cols-3 gap-2">
+          <img
+            src="../img/profile/man4.png"
+            alt="Profile picture of older man smiling"
+            class="bg-blue-100 shadow-md rounded-lg h-10 w-10 mx-auto object-cover"
+          />
+        </div>
+        <button
+          id="createPostBtn"
+          class="bg-blue-600 text-white min-w-max text-sm font-semibold px-4 py-2 rounded-lg shadow-md mb-4 hover:bg-green-600"
+        >
+          Create New Post
+        </button>
+      </div>
+
+      <!-- Right column(activty) -->
       <div
         id="popup"
         class="hidden fixed top-0 left-0 w-screen h-screen bg-gray-700 bg-opacity-80 flex items-center justify-center z-50"
@@ -73,15 +118,9 @@
           </button>
         </div>
       </div>
-      <!-- Left column(Create post)-->
+
       <div class="sm:min-w-max flex flex-col rounded-lg h-full">
         <!-- Toggle button -->
-        <button
-          id="createPostBtn"
-          class="bg-blue-600 text-white min-w-max text-sm font-semibold px-4 py-2 rounded-lg shadow-md mb-4 hover:bg-green-600"
-        >
-          Create New Post
-        </button>
 
         <!-- Post form -->
         <div
@@ -122,29 +161,6 @@
       <!-- Searchbar and -->
       <div>
         <!-- Right column(activty) -->
-        <div
-          class="bg-blue-100 flex flex-wrap shadow-md rounded-lg h-auto p-4 p-1 sm:mt-0 sm:ml-10"
-        >
-          <div
-            class="container w-full min-w-min flex flex-wrap justify-between items-center mx-0.5"
-          >
-            <input
-              type="text"
-              id="searchInput"
-              placeholder="Search"
-              class="border border-green-600 rounded p-1 w-28 h-5 text-[12px] focus:outline-none focus:ring focus:border-green-400 my-2 sm:my-0"
-            />
-
-            <select
-              class="border border-green-600 rounded w-24 focus:outline-none text-[12px] text-gray-700 focus:ring focus:border-green-400 sm:justify-end"
-              id="filterSelect"
-            >
-              <option value="date">Date</option>
-              <option value="comments">Comments</option>
-              <option value="likes">Likes</option>
-            </select>
-          </div>
-        </div>
 
         <div
           id="postContainer"
@@ -165,6 +181,6 @@
       </div>
     </main>
   </body>
-
-  <script type="module" src="../js/pages/feed.js"></script>
+  <script type="module" src="../js/script.js"></script>
+  <script type="module" src="../js/pages/viewProfile.js"></script>
 </html>
