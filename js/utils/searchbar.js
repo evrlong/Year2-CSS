@@ -1,6 +1,7 @@
 export function handleSearch(searchInput, noResults, loadMoreBtn) {
   const searchTerm = searchInput.value.toLowerCase();
-  const postCards = document.querySelectorAll('.post-card'); // Hent oppdatert liste
+  const postCards = document.querySelectorAll('.post-card'); // Select all post cards
+  const postContainer = document.getElementById('postContainer');
 
   postCards.forEach((card) => {
     const title = card.dataset.title?.toLowerCase() || '';
@@ -23,26 +24,12 @@ export function handleSearch(searchInput, noResults, loadMoreBtn) {
     (card) => card.style.display !== 'none',
   );
 
-  // Skjul "No results" hvis det er noen visbare innlegg
-  noResults.classList.toggle('hidden', visibleCards.length > 0);
+  const hasResults = visibleCards.length > 0;
 
-  // Deaktiver "Last mer"-knappen hvis det er færre enn limit visbare innlegg
-  updateLoadMoreButton(visibleCards.length, loadMoreBtn);
-}
-
-export function updateLoadMoreButton(visibleCardCount, loadMoreBtn) {
-  const pageLimit = 20;
-
-  if (visibleCardCount < pageLimit) {
-    console.log('Fewer than 20 posts visible:', visibleCardCount);
-    // Juster denne verdien for å matche 'limit'
-    loadMoreBtn.disabled = true;
-    loadMoreBtn.classList.add('hidden'); // Skjul knappen
-  } else {
-    console.log('20 or more posts visible:', visibleCardCount);
-    loadMoreBtn.disabled = false;
-    loadMoreBtn.classList.remove('hidden');
-  }
+  // Toggle visibility
+  noResults.classList.toggle('hidden', hasResults);
+  postContainer.classList.toggle('hidden', !hasResults);
+  loadMoreBtn.classList.toggle('hidden', !hasResults);
 }
 
 export function debounce(func, delay) {

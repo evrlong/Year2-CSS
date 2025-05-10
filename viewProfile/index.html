@@ -18,10 +18,12 @@
     </header>
     <main
       id="profileContainer"
-      class="container flex justify-center flex-col sm:flex-row p-8"
+      class="container flex justify-start min-w-full flex-col sm:flex-row p-8"
     >
       <!-- Left column(profile)-->
-      <div class="bg-blue-100 flex flex-col p-8 shadow-md rounded-lg h-full">
+      <div
+        class="bg-blue-100 flex flex-col p-8 shadow-md rounded-lg md:w-72 h-full m-12 sm:m-1"
+      >
         <img
           id="profileImg"
           class="rounded-full h-40 w-40 mx-auto object-cover ring-2 ring-green-500"
@@ -30,37 +32,42 @@
         <p id="email" class="text-center text-gray-700 pb-4"></p>
         <div class="bg-blue-600 justify-center flex flex-row">
           <div class="bg-blue-100 p-4 shadow-md flex-1">
-            <div class="text-center font-bold">9</div>
+            <div id="postCount" class="text-center font-bold">0</div>
             Posts
           </div>
           <div class="bg-blue-100 p-4 shadow-md flex-1">
-            <div class="text-center font-bold">1.2k</div>
+            <div id="followers" class="text-center font-bold">0</div>
             Followers
           </div>
         </div>
         <!-- Followbutton-->
-        <button class="p-4 bg-blue-600 my-2 shadow-md hover:bg-green-600">
+        <button id="followButton" class="p-4 my-2 shadow-md hover:bg-green-600">
           Follow
         </button>
 
         <!-- Followers -->
-        <h1 class="text-l font-bold text-center pt-6 pb-2 text-gray-700 w-full">
+        <h1
+          id="followersTitle"
+          class="text-l font-bold text-center pt-6 pb-2 text-gray-700 w-full"
+        >
           Followers
         </h1>
 
-        <div class="grid grid-cols-3 gap-2">
-          <img
-            src="../img/profile/man4.png"
-            alt="Profile picture of older man smiling"
-            class="bg-blue-100 shadow-md rounded-lg h-10 w-10 mx-auto object-cover"
-          />
-        </div>
-        <button
-          id="createPostBtn"
-          class="bg-blue-600 text-white min-w-max text-sm font-semibold px-4 py-2 rounded-lg shadow-md mb-4 hover:bg-green-600"
+        <div
+          id="followersContainer"
+          class="flex flex-wrap gap-1 justify-center"
+        ></div>
+        <h1
+          id="followingTitle"
+          class="text-l font-bold text-center pt-6 pb-2 text-gray-700 w-full"
         >
-          Create New Post
-        </button>
+          Following
+        </h1>
+
+        <div
+          id="followingContainer"
+          class="flex flex-wrap gap-1 justify-center"
+        ></div>
       </div>
 
       <!-- Right column(activty) -->
@@ -164,20 +171,12 @@
 
         <div
           id="postContainer"
-          class="bg-blue-100 flex flex-wrap shadow-md rounded-lg h-auto justify-center sm:p-8 p-1 mt-2 sm:ml-10 lg:justify-between"
+          class="flex flex-wrap rounded-lg h-auto justify-center sm:ml-10 lg:justify-between"
         ></div>
         <p id="noResults" class="hidden text-center text-gray-500 mt-4">
           Ingen treff.
         </p>
-        <div class="flex justify-center mt-4">
-          <button
-            id="loadMoreBtn"
-            class="bg-blue-600 text-white min-w-max text-sm font-semibold px-4 py-2 rounded-lg shadow-md mb-4 list-none cursor-pointer hover:bg-green-600"
-          >
-            Last mer
-            <i class="fa-solid fa-circle-down p-1"></i>
-          </button>
-        </div>
+        <div class="flex justify-center mt-4"></div>
       </div>
     </main>
   </body>

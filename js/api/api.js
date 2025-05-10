@@ -1,3 +1,8 @@
+/** api.js
+ * This module contains functions and constants related to API interactions.
+ * It includes the base URL for the API, default parameters for fetching posts and profiles,
+ */
+
 export const API_BASE_URL = 'https://v2.api.noroff.dev';
 
 export const defaultPostParams = {
@@ -5,6 +10,7 @@ export const defaultPostParams = {
   _comments: 'true',
   _reactions: 'true',
   comments: 'true',
+  tag: 'true',
 };
 
 export const defaultProfileParams = {
@@ -14,8 +20,14 @@ export const defaultProfileParams = {
   _following: 'true',
 };
 
-// Funksjon for å bygge post-URL med ekstra params
-export function getPostUrl({ page = 1, limit = 10 } = {}) {
+/** Function to get the URL for fetching posts with pagination.
+ * @param {Object} options - Options for pagination.
+ * @param {number} options.page - The page number to fetch (default is 1).
+ * @param {number} options.limit - The number of posts per page (default is 20).
+ * @returns {string} - The URL for fetching posts with the specified parameters.
+ */
+
+export function getPostUrl({ page = 1, limit = 20 } = {}) {
   const params = new URLSearchParams({
     ...defaultPostParams,
     page: page,
@@ -25,6 +37,6 @@ export function getPostUrl({ page = 1, limit = 10 } = {}) {
   return `${API_BASE_URL}/social/posts?${params.toString()}`;
 }
 
+export const postUrl = getPostUrl({ page: 1, limit: 20 });
 export const singleProfileUrl = `${API_BASE_URL}/social/profiles`;
-console.log('Single profile URL:', singleProfileUrl);
 export const feedUrl = `${API_BASE_URL}/social/posts`;

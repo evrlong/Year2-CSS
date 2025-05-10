@@ -12,12 +12,16 @@
     <link rel="icon" href="img/favicon_io/favicon.ico" type="image/x-icon" />
   </head>
 
-  <body class="bg-gradient-to-br from-blue-400 to-blue-900 min-h-screen">
+  <body
+    class="bg-gradient-to-br flex flex-col from-blue-400 to-blue-900 min-h-screen min-w-screen"
+  >
     <header>
       <!-- Navbar.html -->
       <div id="navbar-container"></div>
     </header>
-    <main class="container flex justify-center flex-col sm:flex-row h-full p-8">
+    <main
+      class="container flex justify-center flex-col sm:flex-row min-h-full min-w-full p-8"
+    >
       <!-- Hidden popups -->
       <div
         id="popup"
@@ -74,7 +78,9 @@
         </div>
       </div>
       <!-- Left column(Create post)-->
-      <div class="sm:min-w-max flex flex-col rounded-lg h-full">
+      <div
+        class="sm:min-w-max flex flex-col rounded-lg h-full justify-center items-center mt-1 mr-12"
+      >
         <!-- Toggle button -->
         <button
           id="createPostBtn"
@@ -120,13 +126,14 @@
         </div>
       </div>
       <!-- Searchbar and -->
-      <div>
+      <div class="flex flex-col min-w-[80%] min-h-full rounded-lg h-full">
         <!-- Right column(activty) -->
         <div
-          class="bg-blue-100 flex flex-wrap shadow-md rounded-lg h-auto p-4 p-1 sm:mt-0 sm:ml-10"
+          id="sarchAndFilter"
+          class="bg-blue-100 flex flex-wrap shadow-md rounded-lg h-auto p-4 m-1"
         >
           <div
-            class="container w-full min-w-min flex flex-wrap justify-between items-center mx-0.5"
+            class="container min-w-full flex flex-wrap justify-between items-center mx-0.5"
           >
             <input
               type="text"
@@ -139,16 +146,16 @@
               class="border border-green-600 rounded w-24 focus:outline-none text-[12px] text-gray-700 focus:ring focus:border-green-400 sm:justify-end"
               id="filterSelect"
             >
-              <option value="date">Date</option>
-              <option value="comments">Comments</option>
-              <option value="likes">Likes</option>
+              <option value="date">Latest Posts</option>
+              <option value="title">Title (A–Z)</option>
+              <option value="likes">Most Reacted To</option>
             </select>
           </div>
         </div>
 
         <div
           id="postContainer"
-          class="bg-blue-100 flex flex-wrap shadow-md rounded-lg h-auto justify-center sm:p-8 p-1 mt-2 sm:ml-10 lg:justify-between"
+          class="flex flex-wrap rounded-lg min-w-full min-h-full h-auto justify-start"
         ></div>
         <p id="noResults" class="hidden text-center text-gray-500 mt-4">
           Ingen treff.

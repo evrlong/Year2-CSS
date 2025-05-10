@@ -55,6 +55,18 @@ function updateNavbar() {
   const mobileProfileLink = document.getElementById('mobile-profile-link');
   const mobileRegisterLink = document.getElementById('mobile-register-link');
 
+  const currentPath = window.location.pathname;
+
+  if (currentPath.includes('feed')) {
+    feedLink?.classList.add('underline');
+    mobileFeedLink?.classList.add('underline');
+  }
+
+  if (currentPath.includes('profile')) {
+    profileLink?.classList.add('underline');
+    mobileProfileLink?.classList.add('underline');
+  }
+
   if (user) {
     const payload = JSON.parse(atob(user.split('.')[1]));
     const username = payload.name;

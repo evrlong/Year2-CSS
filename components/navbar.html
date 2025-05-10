@@ -2,7 +2,9 @@
 
 <nav class="bg-blue-100 shadow-md p-1 relative min-w-full">
   <div class="container mx-auto flex justify-between items-center px-4">
-    <img src="../img/logo.png" alt="logo" class="h-20 w-20 p-1" />
+    <a href="../index.html" class="flex items-center">
+      <img src="../img/logo.png" alt="logo" class="h-20 w-20 p-1" />
+    </a>
     <button id="menu-toggle" class="text-2xl text-gray-700 md:hidden">
       ☰
     </button>
@@ -13,14 +15,18 @@
       <li>
         <a
           href="../profile/index.html"
-          class="hover:text-blue-500 hover:underline"
+          class="hover:text-blue-500 hover:underline active:underline"
           id="profile-link"
         >
           Profile
         </a>
       </li>
       <li>
-        <a href="../feed/index.html" class="hover:text-blue-500" id="feed-link">
+        <a
+          href="../feed/index.html"
+          class="hover:text-blue-500 active:underline"
+          id="feed-link"
+        >
           Feed
         </a>
       </li>
@@ -28,7 +34,7 @@
       <li id="auth-link">
         <a
           href="../index.html"
-          class="hover:text-blue-500 hover:underline"
+          class="hover:text-blue-500 hover:underline active:underline"
           id="auth-link-text"
         >
           Log in
@@ -37,7 +43,7 @@
       <li>
         <a
           href="../register/index.html"
-          class="hover:text-blue-500"
+          class="hover:text-blue-500 active:underline"
           id="register-link"
         >
           Register
@@ -54,7 +60,7 @@
     <li>
       <a
         href="../profile/index.html"
-        class="p-2 hover:bg-blue-200 flex justify-center flex-col"
+        class="p-2 hover:bg-blue-200 active:underline flex justify-center flex-col"
         id="mobile-profile-link"
       >
         <i class="fa-solid fa-user text-xs text-green-400 drop-shadow"></i>
@@ -64,7 +70,7 @@
     <li>
       <a
         href="../feed/index.html"
-        class="p-2 hover:bg-blue-200 flex justify-center flex-col"
+        class="p-2 hover:bg-blue-200 active:underline flex justify-center flex-col"
         id="mobile-feed-link"
       >
         <i class="fa-solid fa-rss text-xs text-green-400 drop-shadow"></i>
@@ -74,7 +80,7 @@
     <li>
       <a
         href="../index.html"
-        class="p-2 hover:bg-blue-200 flex justify-center flex-col"
+        class="p-2 hover:bg-blue-200 active:underline flex justify-center flex-col"
         id="mobile-auth-link"
       >
         <i
@@ -86,7 +92,7 @@
     <li>
       <a
         href="../register/index.html"
-        class="p-2 hover:bg-blue-200 flex justify-center flex-col"
+        class="p-2 hover:bg-blue-200 active:underline flex justify-center flex-col"
         id="mobile-register-link"
       >
         <i class="fa-solid fa-rss text-xs text-green-400 drop-shadow"></i>
