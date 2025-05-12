@@ -104,7 +104,7 @@ export function createPostCard(post) {
 
   const paragraph = document.createElement('p');
   paragraph.className =
-    'text-[12px] px-0.5 py-1 pl-4 text-gray-700 break-words whitespace-normal w-full';
+    'break-all text-[12px] px-1 py-1  text-gray-700 break-words whitespace-normal w-full';
 
   const userSpan = document.createElement('span');
   userSpan.className = 'pr-1 font-bold';

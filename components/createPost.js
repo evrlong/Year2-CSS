@@ -4,7 +4,7 @@ import { postUrl } from '../js/api/api.js';
 import { defaultHeaders } from '../js/api/config.js';
 import { setupInputCounter } from '../js/utils/inputCounter.js';
 
-import { allPosts } from '../js/components/allPosts.js'; // Global variable to store all posts
+import { allPosts } from '../js/components/allPosts.js'; // ! Global variable to store all posts
 
 export async function addCreateToHtml(renderPosts, postsToRender) {
   try {
@@ -123,11 +123,6 @@ function getPostData() {
       `Body is too long. Maximum length is ${maxBodyLength} characters.`,
       'warning',
     );
-    return null;
-  }
-
-  if (isFallbackImage && !isValidUrl(mediaUrl)) {
-    handleFeedback('Invalid image URL, using fallback image.', 'warning');
     return null;
   }
 
