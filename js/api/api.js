@@ -9,8 +9,6 @@ export const defaultPostParams = {
   _author: 'true',
   _comments: 'true',
   _reactions: 'true',
-  comments: 'true',
-  tag: 'true',
 };
 
 export const defaultProfileParams = {
@@ -27,12 +25,16 @@ export const defaultProfileParams = {
  * @returns {string} - The URL for fetching posts with the specified parameters.
  */
 
-export function getPostUrl({ page = 1, limit = 20 } = {}) {
+export function getPostUrl({ page = 1, limit = 20, tag = 'filterEvr' } = {}) {
   const params = new URLSearchParams({
     ...defaultPostParams,
-    page: page,
-    limit: limit,
+    page,
+    limit,
   });
+
+  if (tag) {
+    params.append('_tag', tag);
+  }
 
   return `${API_BASE_URL}/social/posts?${params.toString()}`;
 }

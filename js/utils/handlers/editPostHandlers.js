@@ -6,7 +6,7 @@ const popup = document.getElementById('popup');
 const editPostForm = document.getElementById('editPostForm');
 
 export function setupEditPostHandlers() {
-  const closeBtn = document.getElementById('closeButton');
+  const closeBtn = document.getElementById('closePopupBtn');
   const deleteBtn = document.getElementById('deletePostBtn');
   const saveBtn = document.getElementById('saveEditBtn');
 

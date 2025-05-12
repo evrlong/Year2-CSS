@@ -36,8 +36,8 @@ export function renderProfileData(
     // Set other profile data
     usernameElement.textContent = data.name || 'No username available';
     emailElement.textContent = data.email || 'No email available';
-    followersCount.textContent = data._count.followers || 0;
-    postCount.textContent = data._count.posts || 0;
+    // followersCount.textContent = data._count.followers || 0;
+    // postCount.textContent = data._count.posts || 0;
 
     console.log('Profile data rendered:', data);
   } else {
@@ -84,11 +84,11 @@ export function renderFollowing(following, maxToShow = 15) {
   });
 }
 
-export function renderProfilePosts(posts) {
-  const postContainer = document.getElementById('postContainer');
-  postContainer.innerHTML = '';
-  posts.forEach((post) => {
-    const postCard = createProfileCard(post);
-    postContainer.appendChild(postCard);
-  });
-}
+// export function renderProfilePosts(posts) {
+//   const postContainer = document.getElementById('postContainer');
+//   postContainer.innerHTML = '';
+//   posts.forEach((post) => {
+//     const postCard = createProfileCard(post);
+//     postContainer.appendChild(postCard);
+//   });
+// }

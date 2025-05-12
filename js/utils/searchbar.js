@@ -25,11 +25,29 @@ export function handleSearch(searchInput, noResults, loadMoreBtn) {
   );
 
   const hasResults = visibleCards.length > 0;
+  const showLoadMore = visibleCards.length >= 20;
+
+  if (hasResults && showLoadMore) {
+    loadMoreBtn.classList.remove('hidden');
+    loadMoreBtn.classList.add('block');
+  } else {
+    loadMoreBtn.classList.add('hidden');
+    loadMoreBtn.classList.remove('block');
+  }
 
   // Toggle visibility
   noResults.classList.toggle('hidden', hasResults);
   postContainer.classList.toggle('hidden', !hasResults);
-  loadMoreBtn.classList.toggle('hidden', !hasResults);
+
+  // if (hasResults) {
+  //   const lastVisibleCard = visibleCards[visibleCards.length - 1];
+
+  //   // Scroll to the last visible card
+  //   lastVisibleCard.scrollIntoView({
+  //     behavior: 'smooth',
+  //     block: 'nearest',
+  //   });
+  // }
 }
 
 export function debounce(func, delay) {

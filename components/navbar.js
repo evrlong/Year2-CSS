@@ -16,7 +16,12 @@ function setupMenuToggle() {
   const mobileMenu = document.getElementById('mobile-menu');
 
   menuToggle.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
+    const isOpen = mobileMenu.classList.contains('max-h-screen');
+
+    mobileMenu.classList.toggle('max-h-0', isOpen);
+    mobileMenu.classList.toggle('opacity-0', isOpen);
+    mobileMenu.classList.toggle('max-h-screen', !isOpen);
+    mobileMenu.classList.toggle('opacity-100', !isOpen);
   });
 }
 

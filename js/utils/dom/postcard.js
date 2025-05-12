@@ -16,7 +16,7 @@ const profileName = profileData?.name;
 export function createPostCard(post) {
   const card = document.createElement('div');
   card.className =
-    'post-card bg-white w-full sm:w-60 h-80 m-1.5 shadow-md rounded-lg overflow-hidden';
+    'post-card bg-white w-full sm:w-60 rounded-2xl shadow-md overflow-hidden transition-shadow hover:shadow-lg duration-200';
 
   // Top row
   const topRow = document.createElement('div');
@@ -73,7 +73,9 @@ export function createPostCard(post) {
   const titleWrapper = document.createElement('div');
   titleWrapper.className = 'bg-gray-100 px-2 py-1 text-center';
   const title = document.createElement('h3');
-  title.className = 'text-sm font-bold text-gray-800 truncate';
+  title.className =
+    'text-sm font-bold text-gray-800 truncate group-hover:text-green-400 transition-colors';
+
   title.textContent = post.title || 'Untitled Post';
   titleWrapper.appendChild(title);
 
@@ -82,7 +84,8 @@ export function createPostCard(post) {
   const contentImageUrl = post.media?.url || fallbackImage;
   contentImg.src = contentImageUrl;
   contentImg.alt = post.media?.alt || 'Default fallback image';
-  contentImg.className = 'h-40 w-full w-3 mx-auto object-cover ring-green-500';
+  contentImg.className =
+    'aspect-[4/3] w-full object-cover group-hover:scale-105 transition-transform duration-300';
 
   contentImg.onerror = () => {
     if (contentImg.src !== fallbackImage) {
@@ -93,7 +96,8 @@ export function createPostCard(post) {
 
   // Bottom content
   const bottom = document.createElement('div');
-  bottom.className = 'bg-white py-1 rounded-b-md';
+  bottom.className =
+    'bg-white py-1 rounded-b-md h-36 flex flex-col justify-between';
 
   const textWrapper = document.createElement('div');
   textWrapper.className = 'flex flex-row w-full justify-start items-center';

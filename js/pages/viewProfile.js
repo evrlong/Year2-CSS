@@ -1,40 +1,55 @@
 // api
-import {
-  fetchUserProfile,
-  fetchUserPosts,
-  fetchFeedPosts,
-} from '../api/fetch.js';
+import { fetchUserProfile, fetchUserPosts } from '../api/fetch.js';
+
+import { addCreateToHtml } from '../../components/createPost.js';
 
 import { singleProfileUrl } from '../api/api.js';
 
 import { getDefaultHeaders } from '../api/config.js';
-import { renderFeedPosts, renderFollowers } from '../utils/render.js';
-
+import { renderFollowers } from '../utils/render.js';
+import { renderFeedPosts } from '../utils/render.js';
 import { checkIfFollowing } from '../api/profile/checkIfFollowing.js';
 
 import { defaultProfileParams } from '../api/api.js';
+import { setupEditPostHandlers } from '../utils/handlers/editPostHandlers.js';
 
 // auth
 import { requireAuth } from '../auth/auth.js';
 
-requireAuth(); // Check if the user is authenticated
+let userPosts = []; // Global variable to store user posts
 
-// Fetch userId using query string
+requireAuth();
+setupEditPostHandlers();
+addCreateToHtml(renderFeedPosts, userPosts);
+
+const profileTitle = document.getElementById('profileTitle');
+
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-console.log(urlParams);
 const userId = urlParams.get('user');
-const userPosts = userId;
-
 const localStorageUser = localStorage.getItem('profileData');
 const parsedUser = JSON.parse(localStorageUser);
 const currentUserName = parsedUser.name;
-console.log('Current user name:', currentUserName); // Debugging log for current user name
-console.log('user posts', userPosts);
-console.log('User ID:', userId);
 
-fetchUserProfile(userId); // Fetch and render user profile
-fetchUserPosts(userId); // Fetch and render user posts
+profileTitle.innerHTML = `${userId}' feed`;
+
+fetchUserProfile(userId); //
+
+fetchUserPosts(userId).then((posts) => {
+  console.log('Globale posts:', userPosts);
+
+  // Unngå duplisering, sjekk om posten allerede finnes i listen
+  const newPosts = posts.filter(
+    (post) => !userPosts.some((existingPost) => existingPost.id === post.id),
+  );
+
+  if (newPosts.length > 0) {
+    userPosts.push(...newPosts); // Legg til nye poster
+    renderFeedPosts(userPosts); // Oppdater UI med de nye innleggene
+  } else {
+    console.log('Ingen nye innlegg');
+  }
+});
 
 const followButton = document.getElementById('followButton');
 let isFollowing = await checkIfFollowing(userId);
@@ -42,12 +57,26 @@ console.log('Is following:', isFollowing);
 
 function updateFollowButton() {
   if (userId === currentUserName) {
-    followButton.style.display = 'none'; // Hide follow button if its own profile
+    followButton.innerHTML = '<i class="fa-solid fa-crown"></i>'; // Egen profil-ikon
+    followButton.classList.remove(
+      'bg-green-500',
+      'bg-red-500',
+      'cursor-default',
+      'hover:bg-green-600',
+    );
+    followButton.classList.add('bg-yellow-500', 'cursor-default');
+    followButton.disabled = true; // Valgfritt: deaktiver knappen
+    return;
   }
 
-  followButton.textContent = isFollowing ? 'Unfollow' : 'Follow';
+  followButton.innerHTML = isFollowing
+    ? '<i class="fa-solid fa-user-minus"></i>'
+    : '<i class="fa-solid fa-user-plus"></i>';
+
+  followButton.classList.remove('bg-yellow-500', 'cursor-default');
   followButton.classList.toggle('bg-green-500', !isFollowing);
   followButton.classList.toggle('bg-red-500', isFollowing);
+  followButton.disabled = false;
 }
 
 updateFollowButton(); // Update the button text and style based on follow status

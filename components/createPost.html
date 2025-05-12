@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <button
+    id="createPostBtn"
+    class="fixed bottom-5 right-7 min-w-max text-sm font-semibold px-5 py-4 sm:px-6 sm:py-5 rounded-full mb-4 z-50 bg-green-500 text-white border-4 border-white shadow-md"
+  >
+    <i class="fa-solid fa-plus font-semibold text-2xl"></i>
+  </button>
+
+  <div
+    id="postForm"
+    class="bg-white sm:min-w-max flex flex-col p-8 shadow-xl border-4 border-green-500 rounded-2xl h-fit fixed bottom-20 right-9 w-80 scale-0 origin-bottom-right transition-transform duration-300 ease-out z-40"
+  >
+    <div
+      id="postFormTitle"
+      class="text-2xl font-bold mb-2 sm:mb-0 flex items-center justify-between px-6 py-4 rounded-2xl"
+    >
+      <span class="w-full text-center text-gray-800">Create Post</span>
+    </div>
+    <div
+      id="postFormDescription"
+      class="text-base mb-6 sm:mb-0 px-5 py-3 rounded-xl max-w-2xl mx-auto text-center text-gray-700"
+    >
+      Share your thoughts and ideas with the community.
+    </div>
+    <div id="imageUrlContainer">
+      <input
+        id="postImageUrl"
+        type="url"
+        placeholder="Image URL"
+        class="border border-green-600 rounded-lg p-2 w-full h-10 my-2 focus:outline-none focus:ring focus:border-green-400"
+      />
+    </div>
+
+    <input
+      id="postTitle"
+      type="text"
+      placeholder="Title"
+      class="border border-green-600 rounded-lg p-2 w-full h-10 my-2 focus:outline-none focus:ring focus:border-green-400"
+    />
+
+    <textarea
+      id="postBody"
+      placeholder="Enter text..."
+      class="border border-green-600 rounded-lg p-2 w-full h-32 my-2 focus:outline-none focus:ring focus:border-green-400"
+    ></textarea>
+
+    <button
+      id="submitPostBtn"
+      type="button"
+      class="bg-green-500 font-semibold px-2 py-3 rounded-lg shadow-md w-full text-white hover:bg-blue-400"
+    >
+      Post
+    </button>
+  </div>
+</html>

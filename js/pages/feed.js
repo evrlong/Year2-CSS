@@ -6,6 +6,12 @@
 
 // auth
 import { requireAuth } from '../auth/auth.js';
+import { loadNavbar } from '../../components/navbar.js';
+
+// components
+import { initCreatePost } from '../../components/createPost.js';
+import { addCreateToHtml } from '../../components/createPost.js';
+import { allPosts } from '../components/allPosts.js';
 
 // api
 import { postUrl } from '../api/api.js';
@@ -13,6 +19,7 @@ import { defaultHeaders } from '../api/config.js';
 
 //fetch
 import { fetchFeedPosts } from '../api/fetch.js';
+// import { fetchFollowedUsernames } from '../api/fetch.js';
 
 // utils
 import { renderFeedPosts } from '../utils/render.js';
@@ -23,8 +30,11 @@ import { handleError } from '../utils/handlers/errorHandler.js';
 import { handleFeedback } from '../utils/handlers/feedback.js';
 import { setupEditPostHandlers } from '../utils/handlers/editPostHandlers.js';
 
+// load navbar
+loadNavbar();
 requireAuth();
-setupEditPostHandlers(); // kun én gang når siden lastes
+setupEditPostHandlers();
+addCreateToHtml(renderFeedPosts, allPosts);
 
 // DOM-elementer
 const searchInput = document.getElementById('searchInput');
@@ -32,14 +42,20 @@ const noResults = document.getElementById('noResults');
 const filterSelect = document.getElementById('filterSelect');
 const loadMoreBtn = document.getElementById('loadMoreBtn');
 const postContainer = document.getElementById('postContainer');
-const allPosts = []; // Global array to store all posts
+// Global array to store all posts
 
+// Debugging log for followed usernames
 // Event listener for search input
 searchInput.addEventListener(
   'input',
   debounce(() => handleSearch(searchInput, noResults, loadMoreBtn), 300),
 );
 
+const localStorageUser = localStorage.getItem('profileData');
+const parsedUser = JSON.parse(localStorageUser);
+const currentUserName = parsedUser.name;
+
+// fetchFollowedUsernames(currentUserName);
 // Pagination variables
 let currentPage = 1;
 const limit = 20;
@@ -52,6 +68,8 @@ fetchFeedPosts(limit, currentPage).then((posts) => {
     postContainer.appendChild(noResults);
     return;
   }
+
+  // check if user is  following
 
   allPosts.push(...posts);
   renderFeedPosts(allPosts);
@@ -99,99 +117,6 @@ filterSelect.addEventListener('change', (event) => {
     );
   }
 
-  console.log('Filtered posts:', filteredPosts); // Debugging log for filtered posts
   renderFeedPosts(filteredPosts);
   handleSearch(searchInput, noResults, loadMoreBtn); // Keep search functionality after filtering
-});
-
-/* * Event listener for the "Create Post" button.
- * This function toggles the visibility of the post form when the button is clicked.
- */
-const toggleBtn = document.getElementById('createPostBtn');
-const postForm = document.getElementById('postForm');
-
-toggleBtn.addEventListener('click', () => {
-  postForm.classList.toggle('hidden');
-});
-
-const submitBtn = document.getElementById('submitPostBtn');
-
-submitBtn.addEventListener('click', async (event) => {
-  event.preventDefault();
-
-  // Get values from the form fields
-  const title = document.getElementById('postTitle').value.trim();
-  const body = document.getElementById('postBody').value.trim();
-  let mediaUrl = document.getElementById('postImageUrl').value.trim();
-
-  // Fallback values if fields are empty
-  title ? title : (title = 'Ingen tittel');
-  body ? body : (body = 'Ingen beskrivelse');
-  mediaUrl
-    ? mediaUrl
-    : (mediaUrl =
-        'https://raw.githubusercontent.com/evrlong/Year2-CSS/js2/img/avatars/catavatar.png'); // Fallback picture
-  if (!mediaUrl.startsWith('http' || mediaUrl.startsWith('https'))) {
-    // Check if the URL is valid
-    mediaUrl =
-      'https://raw.githubusercontent.com/evrlong/Year2-CSS/js2/img/avatars/catavatar.png'; // Fallback picture
-  }
-
-  // Validate input fields
-  const postData = {
-    title: title,
-    body: body,
-    tags: ['filterTagELokken'],
-    media: {
-      url: mediaUrl,
-      alt: 'Bilde',
-    },
-  };
-
-  try {
-    const respone = await fetch(`${postUrl}}`, {
-      method: 'POST',
-      headers: defaultHeaders,
-      body: JSON.stringify(postData),
-    });
-    if (!respone.ok) {
-      const errorData = await respone.json();
-      const errorMessage =
-        errorData.errors?.[0]?.message || 'Failed to create post';
-      console.error('An error occurred while creating post', errorData);
-      handleError(
-        errorMessage,
-        'An error occurred while creating post',
-        'default',
-      );
-      handleError(
-        'An error occurred while creating post',
-        'An error occurred while creating post',
-        'default',
-      );
-      throw new Error('An error occurred while creating post');
-    }
-
-    const data = await respone.json();
-    console.log('Post created successfully:', data);
-
-    // Add the new post to the allPosts array
-    allPosts.unshift(data.data);
-
-    // Update the feed with the new post
-    renderFeedPosts(allPosts);
-
-    // Close the post form and reset the fields
-    postForm.classList.add('hidden');
-    document.getElementById('postTitle').value = '';
-    document.getElementById('postBody').value = '';
-    document.getElementById('postImageUrl').value = '';
-
-    // Show feedback to the user
-    handleFeedback('New post created successfully!', 'success');
-  } catch (error) {
-    // Handle error and show feedback to the user
-    handleError(error, 'An error occurred while creating post', 'default');
-    console.error('An error occurred while creating post:', error);
-  }
 });
