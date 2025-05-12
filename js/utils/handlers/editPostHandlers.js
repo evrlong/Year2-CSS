@@ -1,6 +1,8 @@
 // handlers/editPostHandlers.js
 import { API_BASE_URL } from '../../api/api.js';
 import { defaultHeaders } from '../../api/config.js';
+import { handleError } from '../handlers/errorHandler.js';
+import { setupInputCounter } from '../inputCounter.js';
 
 const popup = document.getElementById('popup');
 const editPostForm = document.getElementById('editPostForm');
@@ -31,6 +33,8 @@ export function setupEditPostHandlers() {
 
   saveBtn.addEventListener('click', async () => {
     const postId = editPostForm.dataset.id;
+    const maxTitleLength = 25;
+    const maxBodyLength = 250;
     const updatedPost = {
       title: document.getElementById('editPostTitle').value,
       body: document.getElementById('editPostBody').value,
@@ -39,6 +43,24 @@ export function setupEditPostHandlers() {
         alt: 'Updated image',
       },
     };
+
+    if (updatedPost.title.length > maxTitleLength) {
+      handleError(
+        '',
+        `Title must be shorter than ${maxTitleLength} characters.`,
+        'warning',
+      );
+      return;
+    }
+    if (updatedPost.body.length > maxBodyLength) {
+      handleError(
+        '',
+        `Text must be shorter than ${maxBodyLength} characters.`,
+        'warning',
+      );
+      return;
+    }
+
     try {
       const response = await fetch(`${API_BASE_URL}/social/posts/${postId}`, {
         method: 'PUT',
@@ -59,5 +81,12 @@ export function openEditPopup(post) {
   document.getElementById('editPostTitle').value = post.title || '';
   document.getElementById('editPostBody').value = post.body || '';
   document.getElementById('editPostImageUrl').value = post.media?.url || '';
+
+  const editPostTitle = document.getElementById('editPostTitle');
+  const editPostBody = document.getElementById('editPostBody');
+
+  setupInputCounter(editPostTitle, 25);
+  setupInputCounter(editPostBody, 250);
+
   popup.classList.remove('hidden');
 }
