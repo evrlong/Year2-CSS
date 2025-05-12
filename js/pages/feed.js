@@ -111,10 +111,6 @@ filterSelect.addEventListener('change', (event) => {
     filteredPosts.sort((a, b) =>
       a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }),
     );
-  } else if (selectedFilter === 'likes') {
-    filteredPosts.sort(
-      (a, b) => (b._count?.reactions || 0) - (a._count?.reactions || 0),
-    );
   }
 
   renderFeedPosts(filteredPosts);
