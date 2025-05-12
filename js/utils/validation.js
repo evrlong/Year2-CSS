@@ -7,7 +7,7 @@ export function validateInput(input, message, minLength, configKey) {
   const isValid = pattern.test(value);
   const isValidLength = value.length >= minLength;
 
-  // Rydd opp
+  // Clear previous messages
   message.classList.add('hidden');
   message.textContent = '';
 
