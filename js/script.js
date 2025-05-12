@@ -1,7 +1,4 @@
-import { loadFooter } from '../components/footer.js';
-
-// Kall funksjonen for å laste foten
-loadFooter();
+// import { loadFooter } from '../components/footer.js';
 
 // const menuToggle = document.getElementById('menu-toggle');
 // const mobileMenu = document.getElementById('mobile-menu');

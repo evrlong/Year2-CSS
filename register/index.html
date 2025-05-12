@@ -130,17 +130,35 @@
                 id="foxAvatar"
               />
             </div>
+
             <input
               type="hidden"
               name="avatar"
               id="avatar"
               value="https://raw.githubusercontent.com/evrlong/Year2-CSS/js2/img/avatars/catavatar.png"
             />
-            <div class="mt-12 text-center">
+
+            <div class="my-4 text-center">
               <div
                 id="form-message"
                 class="hidden text-center py-2 font-semibold"
               ></div>
+              <div class="mb-4">
+                <label
+                  for="avatar-url"
+                  class="block text-sm font-medium text-gray-700"
+                >
+                  Or add URL manually
+                </label>
+                <input
+                  type="url"
+                  name="avatar-url"
+                  id="avatar-url"
+                  class="border border-gray-300 w-full focus:border-blue-500 focus:outline-none p-1 rounded mb-4"
+                  placeholder="https://example.com/pic.png"
+                />
+              </div>
+
               <button
                 id="register-button"
                 type="submit"
