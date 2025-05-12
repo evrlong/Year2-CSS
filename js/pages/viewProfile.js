@@ -9,6 +9,7 @@ import { getDefaultHeaders } from '../api/config.js';
 import { renderFollowers } from '../utils/render.js';
 import { renderFeedPosts } from '../utils/render.js';
 import { checkIfFollowing } from '../api/profile/checkIfFollowing.js';
+import { loadNavbar } from '../../components/navbar.js';
 
 import { defaultProfileParams } from '../api/api.js';
 import { setupEditPostHandlers } from '../utils/handlers/editPostHandlers.js';
@@ -18,6 +19,7 @@ import { requireAuth } from '../auth/auth.js';
 
 let userPosts = []; // Global variable to store user posts
 
+loadNavbar(); // Load the navbar
 requireAuth();
 setupEditPostHandlers();
 addCreateToHtml(renderFeedPosts, userPosts);
