@@ -75,7 +75,7 @@ document.getElementById('login-button').addEventListener('click', (event) => {
   event.preventDefault();
 
   const userLogin = {
-    email: document.getElementById('email').value,
+    email: document.getElementById('email').value.trim().toLowerCase(), // Konverterer e-post til små bokstaver
     password: document.getElementById('password').value,
   };
 

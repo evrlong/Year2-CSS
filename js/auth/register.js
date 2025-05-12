@@ -50,6 +50,7 @@ export async function register(url, data) {
 export const submitButton = document.getElementById('register-button');
 const avatars = document.querySelectorAll('.avatar');
 const avatarInput = document.getElementById('avatar');
+const avatarUrlInput = document.getElementById('avatar-url'); // New input for the avatar URL
 const nameInput = document.getElementById('name');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
@@ -62,7 +63,7 @@ const confirmPasswordMessage = document.getElementById(
 );
 const avatarMessage = document.getElementById('avatar-message');
 
-// Avatar selection
+// Avatar selection (Image clicks)
 avatars.forEach((avatar) => {
   avatar.addEventListener('click', () => {
     avatars.forEach((av) =>
@@ -70,9 +71,20 @@ avatars.forEach((avatar) => {
     );
     avatar.classList.add('border-4', 'border-green-500');
     avatarInput.value = avatar.getAttribute('data-avatar-url').trim();
+    avatarUrlInput.value = ''; // Clear the URL input when an avatar is selected
     avatarMessage.textContent = '';
     avatarMessage.classList.add('hidden');
   });
+});
+
+// Avatar URL input handling
+avatarUrlInput.addEventListener('input', () => {
+  const url = avatarUrlInput.value.trim();
+  if (url) {
+    avatarInput.value = url; // Update the avatar value with the URL from the input
+    avatarMessage.textContent = ''; // Clear any avatar message
+    avatarMessage.classList.add('hidden');
+  }
 });
 
 // Input validation listeners
@@ -103,10 +115,16 @@ confirmPasswordInput.addEventListener('input', () => {
 submitButton.addEventListener('click', async (event) => {
   event.preventDefault();
 
+  // Hent og konverter inputene til små bokstaver
   const avatarValue = avatarInput.value.trim();
   const isAvatarValid = avatarValue.length > 0;
+
+  const nameValue = nameInput.value.trim(); // Brukernavn konverteres til små bokstaver
   const isNameValid = validateInput(nameInput, usernameMessage, 3, 'username');
+
+  const emailValue = emailInput.value.trim().toLowerCase(); // E-post konverteres til små bokstaver
   const isEmailValid = validateInput(emailInput, emailMessage, 15, 'email');
+
   const isPasswordValid = validateInput(
     passwordInput,
     passwordMessage,
@@ -119,6 +137,7 @@ submitButton.addEventListener('click', async (event) => {
     confirmPasswordMessage,
   );
 
+  // Vis feilmelding for avatar hvis den ikke er valgt
   if (!isAvatarValid) {
     avatarMessage.textContent = 'please choose an avatar';
     avatarMessage.classList.remove('hidden');
@@ -138,15 +157,15 @@ submitButton.addEventListener('click', async (event) => {
   }
 
   const userRegister = {
-    name: nameInput.value.trim(),
-    email: emailInput.value.trim(),
+    name: nameValue, // Bruker det konverterte navnet
+    email: emailValue, // Bruker den konverterte e-posten
     password: passwordInput.value,
     avatar: {
       url: avatarValue,
     },
   };
 
-  // UI feedback during registration
+  // UI-feedback under registrering
   submitButton.disabled = true;
   submitButton.textContent = 'Registrerer...';
 
