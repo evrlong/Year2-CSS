@@ -2,8 +2,9 @@ import { handleFeedback } from '../js/utils/handlers/feedback.js';
 import { handleError } from '../js/utils/handlers/errorHandler.js';
 import { postUrl } from '../js/api/api.js';
 import { defaultHeaders } from '../js/api/config.js';
+import { setupInputCounter } from '../js/utils/inputCounter.js';
 
-import { allPosts } from '../js/components/allPosts.js';
+import { allPosts } from '../js/components/allPosts.js'; // Global variable to store all posts
 
 export async function addCreateToHtml(renderPosts, postsToRender) {
   try {
@@ -32,6 +33,12 @@ export function initCreatePost(renderPosts, postsToRender) {
     return;
   }
 
+  // 🧮 Set up dynamic input counters
+  const postTitleInput = document.getElementById('postTitle');
+  const postBodyInput = document.getElementById('postBody');
+  setupInputCounter(postTitleInput, 25);
+  setupInputCounter(postBodyInput, 250);
+
   // Toggle form visibility
   createPostBtn.addEventListener('click', () => {
     postForm.classList.toggle('scale-0');
@@ -42,7 +49,7 @@ export function initCreatePost(renderPosts, postsToRender) {
     event.preventDefault();
     const postData = getPostData();
 
-    if (!postData) return; // If data is invalid, exit early
+    if (!postData) return;
 
     try {
       const response = await fetch(postUrl, {
@@ -82,8 +89,19 @@ function getPostData() {
   const body = document.getElementById('postBody').value.trim();
   const mediaUrl = document.getElementById('postImageUrl').value.trim();
 
-  const postTitle = title || 'Ingen tittel';
-  const postBody = body || 'Ingen beskrivelse';
+  const maxTitleLength = 25;
+  const maxBodyLength = 250;
+
+  const postTitle =
+    title.length > maxTitleLength
+      ? title.slice(0, maxTitleLength).trim() + '…'
+      : title || 'Ingen tittel';
+
+  const postBody =
+    body.length > maxBodyLength
+      ? body.slice(0, maxBodyLength).trim() + '…'
+      : body || 'No text';
+
   const postMediaUrl =
     mediaUrl ||
     'https://raw.githubusercontent.com/evrlong/Year2-CSS/js2/img/avatars/catavatar.png';
@@ -91,6 +109,22 @@ function getPostData() {
   const isFallbackImage =
     postMediaUrl ===
     'https://raw.githubusercontent.com/evrlong/Year2-CSS/js2/img/avatars/catavatar.png';
+
+  if (postTitle.length > maxTitleLength) {
+    handleFeedback(
+      `Title is too long. Maximum length is ${maxTitleLength} characters.`,
+      'warning',
+    );
+    return null;
+  }
+
+  if (postBody.length > maxBodyLength) {
+    handleFeedback(
+      `Body is too long. Maximum length is ${maxBodyLength} characters.`,
+      'warning',
+    );
+    return null;
+  }
 
   if (isFallbackImage && !isValidUrl(mediaUrl)) {
     handleFeedback('Invalid image URL, using fallback image.', 'warning');
