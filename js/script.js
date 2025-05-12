@@ -1,9 +1,14 @@
-const menuToggle = document.getElementById('menu-toggle');
-const mobileMenu = document.getElementById('mobile-menu');
+import { loadFooter } from '../components/footer.js';
 
-// menuToggle.addEventListener('click', () => {
-//   mobileMenu.classList.toggle('hidden');
-// });
+// Kall funksjonen for å laste foten
+loadFooter();
+
+// const menuToggle = document.getElementById('menu-toggle');
+// const mobileMenu = document.getElementById('mobile-menu');
+
+// // menuToggle.addEventListener('click', () => {
+// //   mobileMenu.classList.toggle('hidden');
+// // });
 
 // Henter alle lenkene
 const links = document.querySelectorAll('.nav-link');
