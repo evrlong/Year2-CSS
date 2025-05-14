@@ -10,6 +10,7 @@ import { renderFollowers } from '../utils/render.js';
 import { renderFeedPosts } from '../utils/render.js';
 import { checkIfFollowing } from '../api/profile/checkIfFollowing.js';
 import { loadNavbar } from '../../components/navbar.js';
+import { loadFooter } from '../../components/footer.js';
 
 import { defaultProfileParams } from '../api/api.js';
 import { setupEditPostHandlers } from '../utils/handlers/editPostHandlers.js';
@@ -19,12 +20,11 @@ import { requireAuth } from '../auth/auth.js';
 
 let userPosts = []; // Global variable to store user posts
 
-loadNavbar(); // Load the navbar
+loadNavbar();
+loadFooter();
 requireAuth();
 setupEditPostHandlers();
 addCreateToHtml(renderFeedPosts, userPosts);
-
-const profileTitle = document.getElementById('profileTitle');
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -33,6 +33,9 @@ const localStorageUser = localStorage.getItem('profileData');
 const parsedUser = JSON.parse(localStorageUser);
 const currentUserName = parsedUser.name;
 
+document.title = `SOME | ${userId}'s Profile`;
+
+const profileTitle = document.getElementById('profileTitle');
 profileTitle.innerHTML = `${userId}' feed`;
 
 fetchUserProfile(userId); //
