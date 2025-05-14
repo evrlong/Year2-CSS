@@ -1,4 +1,5 @@
 import { loadNavbar } from '../../components/navbar.js';
+import { loadFooter } from '../../components/footer.js';
 
-loadNavbar(); // Last navbaren
-console.log('Navbar loaded'); // Bekreft at navbaren er lastet
+loadNavbar();
+loadFooter();

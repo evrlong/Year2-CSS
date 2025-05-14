@@ -6,7 +6,10 @@
 
 // auth
 import { requireAuth } from '../auth/auth.js';
+
+// html components
 import { loadNavbar } from '../../components/navbar.js';
+import { loadFooter } from '../../components/footer.js';
 
 // components
 import { initCreatePost } from '../../components/createPost.js';
@@ -32,6 +35,7 @@ import { setupEditPostHandlers } from '../utils/handlers/editPostHandlers.js';
 
 // load navbar
 loadNavbar();
+loadFooter();
 requireAuth();
 setupEditPostHandlers();
 addCreateToHtml(renderFeedPosts, allPosts);
