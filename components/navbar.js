@@ -63,13 +63,13 @@ function updateNavbar() {
   const currentPath = window.location.pathname;
 
   if (currentPath.includes('feed')) {
-    feedLink?.classList.add('underline');
-    mobileFeedLink?.classList.add('underline');
+    feedLink?.classList.add('after:w-full');
+    mobileFeedLink?.classList.add('after:w-full');
   }
 
   if (currentPath.includes('profile')) {
-    profileLink?.classList.add('underline');
-    mobileProfileLink?.classList.add('underline');
+    profileLink?.classList.add('after:w-full');
+    mobileProfileLink?.classList.add('after:w-full');
   }
 
   if (user) {
