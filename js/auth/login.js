@@ -8,10 +8,11 @@
 import { API_BASE_URL } from '../api/api.js';
 import { isLoggedIn } from './auth.js';
 import { loadNavbar } from '../../components/navbar.js';
-import { validateInput } from '../utils/validation.js';
+import { loadFooter } from '../../components/footer.js';
 import { handleFeedback } from '../utils/handlers/feedback.js';
 
 loadNavbar();
+loadFooter();
 
 if (isLoggedIn()) {
   const user = localStorage.getItem('accessToken');
@@ -58,10 +59,12 @@ async function login(url, data) {
     const payload = JSON.parse(atob(accessToken.split('.')[1]));
     const username = payload.name;
 
-    window.location.href = `../viewprofile/index.html?user=${username}`;
+    setTimeout(() => {
+      window.location.href = `../viewprofile/index.html?user=${username}`;
+    }, 2000);
     return result;
   } catch (error) {
-    console.error('Error:', error);
+    handleFeedback('Something went wrong', 'danger');
     throw error;
   }
 }
@@ -75,15 +78,18 @@ document.getElementById('login-button').addEventListener('click', (event) => {
   event.preventDefault();
 
   const userLogin = {
-    email: document.getElementById('email').value.trim().toLowerCase(), // Konverterer e-post til små bokstaver
+    email: document.getElementById('email').value.trim().toLowerCase(),
     password: document.getElementById('password').value,
   };
 
   login(`${API_BASE_URL}/auth/login`, userLogin)
     .then((result) => {
-      console.log('Login successful:', result);
+      if (!result) {
+        return;
+      }
+      handleFeedback('Logged in successfully', 'success');
     })
     .catch((error) => {
-      console.error('Login failed:', error);
+      handleFeedback(error, 'danger');
     });
 });

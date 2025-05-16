@@ -48,8 +48,6 @@ export async function fetchFeedPosts(limit, page) {
     return [];
   }
 
-  console.log('Fetching posts from:', url);
-
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -149,39 +147,8 @@ export async function fetchUserPosts(userId) {
 
     // renderFeedPosts(data.data || []); // Render posts into the feed
     return data.data || [];
-    console.log('User posts data:', data); // Debugging log for user posts
-    console.log('data.dat:', data.data);
   } catch (error) {
     console.error('Error fetching user posts:', error);
     return [];
   }
 }
-
-// export async function fetchFollowedUsernames(userId) {
-//   const queryString = new URLSearchParams(defaultProfileParams).toString();
-//   const url = `${singleProfileUrl}/${userId}?${queryString}`;
-
-//   try {
-//     const response = await fetch(url, {
-//       method: 'GET',
-//       headers: getDefaultHeaders(),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error('Failed to fetch followed usernames');
-//     }
-
-//     const userData = await response.json();
-//     console.log('User data:', userData); // Debugging log for user data
-//     console.log('Following list:', userData.data.following); // Debugging log for following list
-
-//     // Hent bare navnene på de brukerne man følger
-//     const followingList = userData.data.following || [];
-//     const followedUsernames = followingList.map((follower) => follower.name);
-
-//     return followedUsernames; // Returner listen med navnene
-//   } catch (error) {
-//     console.error('Error fetching followed usernames:', error);
-//     return [];
-//   }
-// }

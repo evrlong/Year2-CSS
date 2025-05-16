@@ -1,70 +1,64 @@
-/* feed.js - Main feed page script
- * This script handles the feed page functionality, including fetching posts,
- * rendering them, handling search and filtering, and creating new posts.
- * It also manages user authentication and error handling.
+/**
+ * @file feed.js
+ * @description Main feed logic for fetching, rendering, filtering, and paginating posts.
+ * Handles authentication, layout initialization, post creation, search, and error handling.
  */
 
-// auth
+// Authentication
 import { requireAuth } from '../auth/auth.js';
 
-// html components
+// Layout components
 import { loadNavbar } from '../../components/navbar.js';
 import { loadFooter } from '../../components/footer.js';
 
-// components
-import { initCreatePost } from '../../components/createPost.js';
-import { addCreateToHtml } from '../../components/createPost.js';
+// Post creation and management
+import {
+  initCreatePost,
+  addCreateToHtml,
+} from '../../components/createPost.js';
 import { allPosts } from '../components/allPosts.js';
-
-// api
-import { postUrl } from '../api/api.js';
-import { defaultHeaders } from '../api/config.js';
-
-//fetch
 import { fetchFeedPosts } from '../api/fetch.js';
-// import { fetchFollowedUsernames } from '../api/fetch.js';
 
-// utils
+// Utility functions
 import { renderFeedPosts } from '../utils/render.js';
 import { handleSearch, debounce } from '../utils/searchbar.js';
-
-// handeler
-import { handleError } from '../utils/handlers/errorHandler.js';
-import { handleFeedback } from '../utils/handlers/feedback.js';
 import { setupEditPostHandlers } from '../utils/handlers/editPostHandlers.js';
 
-// load navbar
+// Initialization
 loadNavbar();
 loadFooter();
 requireAuth();
 setupEditPostHandlers();
 addCreateToHtml(renderFeedPosts, allPosts);
 
-// DOM-elementer
+// DOM elements
 const searchInput = document.getElementById('searchInput');
 const noResults = document.getElementById('noResults');
 const filterSelect = document.getElementById('filterSelect');
 const loadMoreBtn = document.getElementById('loadMoreBtn');
 const postContainer = document.getElementById('postContainer');
-// Global array to store all posts
 
-// Debugging log for followed usernames
-// Event listener for search input
+// User info
+const localStorageUser = localStorage.getItem('profileData');
+const parsedUser = JSON.parse(localStorageUser);
+const currentUserName = parsedUser.name;
+
+// Pagination
+let currentPage = 1;
+const limit = 20;
+
+/**
+ * Handle live post searching via debounced input.
+ */
 searchInput.addEventListener(
   'input',
   debounce(() => handleSearch(searchInput, noResults, loadMoreBtn), 300),
 );
 
-const localStorageUser = localStorage.getItem('profileData');
-const parsedUser = JSON.parse(localStorageUser);
-const currentUserName = parsedUser.name;
-
-// fetchFollowedUsernames(currentUserName);
-// Pagination variables
-let currentPage = 1;
-const limit = 20;
-
-// Get and show posts
+/**
+ * Fetch and render the initial batch of posts on page load.
+ * If no posts are found, show a "no results" message.
+ */
 fetchFeedPosts(limit, currentPage).then((posts) => {
   if (!Array.isArray(posts) || posts.length === 0) {
     noResults.classList.remove('hidden');
@@ -72,8 +66,6 @@ fetchFeedPosts(limit, currentPage).then((posts) => {
     postContainer.appendChild(noResults);
     return;
   }
-
-  // check if user is  following
 
   allPosts.push(...posts);
   renderFeedPosts(allPosts);
@@ -83,7 +75,10 @@ fetchFeedPosts(limit, currentPage).then((posts) => {
   }
 });
 
-// load more btn
+/**
+ * Load additional posts on click of "Load More" button.
+ * Updates page count and appends new posts to feed.
+ */
 loadMoreBtn.addEventListener('click', async () => {
   currentPage++;
   const morePosts = await fetchFeedPosts(limit, currentPage);
@@ -96,15 +91,18 @@ loadMoreBtn.addEventListener('click', async () => {
   allPosts.push(...morePosts);
   renderFeedPosts(allPosts);
 
-  // Hide the load more button if no more posts are available
   if (morePosts.length < limit) {
     loadMoreBtn.classList.add('hidden');
   }
 
-  handleSearch(searchInput, noResults, loadMoreBtn); // Keep search functionality after loading more posts
+  handleSearch(searchInput, noResults, loadMoreBtn);
 });
 
-// Filtrering
+/**
+ * Apply selected filter to all loaded posts.
+ * Sorts by date or title depending on the dropdown value.
+ * @param {Event} event - The change event from the select element.
+ */
 filterSelect.addEventListener('change', (event) => {
   const selectedFilter = event.target.value;
   let filteredPosts = [...allPosts];
@@ -118,5 +116,5 @@ filterSelect.addEventListener('change', (event) => {
   }
 
   renderFeedPosts(filteredPosts);
-  handleSearch(searchInput, noResults, loadMoreBtn); // Keep search functionality after filtering
+  handleSearch(searchInput, noResults, loadMoreBtn);
 });

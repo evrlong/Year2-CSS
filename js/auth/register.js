@@ -1,4 +1,4 @@
-/** register.js
+/**
  * User registration logic for the application.
  * This module handles user registration, input validation, and feedback handling.
  * @module register
@@ -8,7 +8,8 @@ import { API_BASE_URL } from '../api/api.js';
 import { validateInput, validateConfirmPassword } from '../utils/validation.js';
 import { handleFeedback } from '../utils/handlers/feedback.js';
 
-/** Function to handle user registration.
+/**
+ * Function to handle user registration.
  * @function register
  * @param {string} url - The URL to send the registration request to.
  * @param {object} data - The registration data containing name, email, password, and avatar.
@@ -36,7 +37,7 @@ export async function register(url, data) {
       return;
     }
 
-    handleFeedback('Registrering fullført! Du sendes videre ...', 'success');
+    handleFeedback('Registration successful! Redirecting...', 'success');
 
     setTimeout(() => {
       window.location.href = '/index.html';
@@ -46,7 +47,8 @@ export async function register(url, data) {
     handleFeedback('Something went wrong', 'danger');
   }
 }
-// DOM elements
+
+/** DOM elements for user registration form */
 export const submitButton = document.getElementById('register-button');
 const avatars = document.querySelectorAll('.avatar');
 const avatarInput = document.getElementById('avatar');
@@ -63,7 +65,7 @@ const confirmPasswordMessage = document.getElementById(
 );
 const avatarMessage = document.getElementById('avatar-message');
 
-// Avatar selection (Image clicks)
+/** Avatar selection (Image clicks) */
 avatars.forEach((avatar) => {
   avatar.addEventListener('click', () => {
     avatars.forEach((av) =>
@@ -71,23 +73,23 @@ avatars.forEach((avatar) => {
     );
     avatar.classList.add('border-4', 'border-green-500');
     avatarInput.value = avatar.getAttribute('data-avatar-url').trim();
-    avatarUrlInput.value = ''; // Clear the URL input when an avatar is selected
+    avatarUrlInput.value = '';
     avatarMessage.textContent = '';
     avatarMessage.classList.add('hidden');
   });
 });
 
-// Avatar URL input handling
+/** Avatar URL input handling */
 avatarUrlInput.addEventListener('input', () => {
   const url = avatarUrlInput.value.trim();
   if (url) {
-    avatarInput.value = url; // Update the avatar value with the URL from the input
-    avatarMessage.textContent = ''; // Clear any avatar message
+    avatarInput.value = url;
+    avatarMessage.textContent = '';
     avatarMessage.classList.add('hidden');
   }
 });
 
-// Input validation listeners
+/** Input validation listeners for name, email, password, and confirm password */
 nameInput.addEventListener('input', () => {
   validateInput(nameInput, usernameMessage, 3, 'username');
 });
@@ -108,21 +110,22 @@ confirmPasswordInput.addEventListener('input', () => {
   );
 });
 
-/** Event listener for the register button.
+/**
+ * Event listener for the register button.
  * @description This function handles the click event on the register button.
  * It validates the input fields and calls the register function with the provided data.
  */
 submitButton.addEventListener('click', async (event) => {
   event.preventDefault();
 
-  // Hent og konverter inputene til små bokstaver
+  // Fetch and convert inputs to lowercase
   const avatarValue = avatarInput.value.trim();
   const isAvatarValid = avatarValue.length > 0;
 
-  const nameValue = nameInput.value.trim(); // Brukernavn konverteres til små bokstaver
+  const nameValue = nameInput.value.trim();
   const isNameValid = validateInput(nameInput, usernameMessage, 3, 'username');
 
-  const emailValue = emailInput.value.trim().toLowerCase(); // E-post konverteres til små bokstaver
+  const emailValue = emailInput.value.trim().toLowerCase();
   const isEmailValid = validateInput(emailInput, emailMessage, 15, 'email');
 
   const isPasswordValid = validateInput(
@@ -137,9 +140,9 @@ submitButton.addEventListener('click', async (event) => {
     confirmPasswordMessage,
   );
 
-  // Vis feilmelding for avatar hvis den ikke er valgt
+  // Show error message for avatar if it is not selected
   if (!isAvatarValid) {
-    avatarMessage.textContent = 'please choose an avatar';
+    avatarMessage.textContent = 'Please choose an avatar';
     avatarMessage.classList.remove('hidden');
   } else {
     avatarMessage.textContent = '';
@@ -157,21 +160,21 @@ submitButton.addEventListener('click', async (event) => {
   }
 
   const userRegister = {
-    name: nameValue, // Bruker det konverterte navnet
-    email: emailValue, // Bruker den konverterte e-posten
+    name: nameValue,
+    email: emailValue,
     password: passwordInput.value,
     avatar: {
       url: avatarValue,
     },
   };
 
-  // UI-feedback under registrering
+  // UI-feedback during registration
   submitButton.disabled = true;
-  submitButton.textContent = 'Registrerer...';
+  submitButton.textContent = 'Registering...';
 
   const registerUrl = `${API_BASE_URL}/auth/register`;
   await register(registerUrl, userRegister);
 
   submitButton.disabled = false;
-  submitButton.textContent = 'Registrer';
+  submitButton.textContent = 'Register';
 });

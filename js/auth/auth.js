@@ -41,7 +41,6 @@ export function isLoggedIn() {
 
   if (!payload) return false;
   if (payload.exp && payload.exp < Date.now() / 1000) {
-    console.log('Outdated token, logging out...');
     logOut();
     return false;
   }

@@ -1,68 +1,77 @@
-// api
+/**
+ * @file ViewProfile.js
+ * @description Handles logic for the profile page, including fetching profile data,
+ * displaying user posts, and managing follow/unfollow functionality.
+ */
+
+// API imports
 import { fetchUserProfile, fetchUserPosts } from '../api/fetch.js';
-
-import { addCreateToHtml } from '../../components/createPost.js';
-
-import { singleProfileUrl } from '../api/api.js';
-
+import { singleProfileUrl, defaultProfileParams } from '../api/api.js';
 import { getDefaultHeaders } from '../api/config.js';
-import { renderFollowers } from '../utils/render.js';
-import { renderFeedPosts } from '../utils/render.js';
 import { checkIfFollowing } from '../api/profile/checkIfFollowing.js';
+
+// UI components and handlers
 import { loadNavbar } from '../../components/navbar.js';
 import { loadFooter } from '../../components/footer.js';
-
-import { defaultProfileParams } from '../api/api.js';
+import { addCreateToHtml } from '../../components/createPost.js';
+import { renderFollowers, renderFeedPosts } from '../utils/render.js';
 import { setupEditPostHandlers } from '../utils/handlers/editPostHandlers.js';
 
-// auth
+// Authentication
 import { requireAuth } from '../auth/auth.js';
 
-let userPosts = []; // Global variable to store user posts
-
+// Initialize layout and authentication
 loadNavbar();
 loadFooter();
 requireAuth();
 setupEditPostHandlers();
+
+// Global state
+let userPosts = []; // Store user posts
+
+// Setup post creation UI
 addCreateToHtml(renderFeedPosts, userPosts);
 
+// Get user info from query parameters and localStorage
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const userId = urlParams.get('user');
+
 const localStorageUser = localStorage.getItem('profileData');
 const parsedUser = JSON.parse(localStorageUser);
 const currentUserName = parsedUser.name;
 
+// Update document title and page header
 document.title = `SOME | ${userId}'s Profile`;
-
 const profileTitle = document.getElementById('profileTitle');
-profileTitle.innerHTML = `${userId}' feed`;
+profileTitle.innerHTML = `${userId}'s feed`;
 
-fetchUserProfile(userId); //
+// Fetch and display profile and posts
+fetchUserProfile(userId);
 
 fetchUserPosts(userId).then((posts) => {
-  console.log('Globale posts:', userPosts);
-
-  // Unngå duplisering, sjekk om posten allerede finnes i listen
+  // Avoid duplicates
   const newPosts = posts.filter(
     (post) => !userPosts.some((existingPost) => existingPost.id === post.id),
   );
 
   if (newPosts.length > 0) {
-    userPosts.push(...newPosts); // Legg til nye poster
-    renderFeedPosts(userPosts); // Oppdater UI med de nye innleggene
-  } else {
-    console.log('Ingen nye innlegg');
+    userPosts.push(...newPosts);
+    renderFeedPosts(userPosts);
   }
 });
 
+// Follow button logic
 const followButton = document.getElementById('followButton');
-let isFollowing = await checkIfFollowing(userId);
-console.log('Is following:', isFollowing);
+let isFollowing = await checkIfFollowing(userId); // Must be in top-level async context or inside IIFE
 
+/**
+ * Updates the follow button's appearance and state
+ * based on whether the current user is following the profile.
+ */
 function updateFollowButton() {
   if (userId === currentUserName) {
-    followButton.innerHTML = '<i class="fa-solid fa-crown"></i>'; // Egen profil-ikon
+    followButton.innerHTML = '<i class="fa-solid fa-crown"></i>';
     followButton.classList.remove(
       'bg-green-500',
       'bg-red-500',
@@ -70,7 +79,7 @@ function updateFollowButton() {
       'hover:bg-green-600',
     );
     followButton.classList.add('bg-yellow-500', 'cursor-default');
-    followButton.disabled = true; // Valgfritt: deaktiver knappen
+    followButton.disabled = true;
     return;
   }
 
@@ -84,15 +93,18 @@ function updateFollowButton() {
   followButton.disabled = false;
 }
 
-updateFollowButton(); // Update the button text and style based on follow status
+// Initial update of follow button
+updateFollowButton();
 
-// add event listener to follow button
+/**
+ * Event listener for follow/unfollow button click
+ */
 followButton.addEventListener('click', async () => {
   try {
-    // lock button to prevent multiple clicks
-    followButton.disabled = true;
+    followButton.disabled = true; // Prevent multiple clicks
+
     if (isFollowing) {
-      // Unfollow user
+      // Unfollow logic
       const unfollowResponse = await fetch(
         `${singleProfileUrl}/${userId}/unfollow`,
         {
@@ -101,17 +113,13 @@ followButton.addEventListener('click', async () => {
         },
       );
 
-      console.log('Unfollow response:', unfollowResponse);
-
       if (!unfollowResponse.ok) {
         throw new Error('Failed to unfollow user');
       }
 
-      // Update UI and status
       isFollowing = false;
-      updateFollowButton();
     } else {
-      // Follow user
+      // Follow logic
       const followResponse = await fetch(
         `${singleProfileUrl}/${userId}/follow`,
         {
@@ -120,19 +128,16 @@ followButton.addEventListener('click', async () => {
         },
       );
 
-      console.log('Follow response:', followResponse);
-
       if (!followResponse.ok) {
         throw new Error('Failed to follow user');
       }
 
-      const data = await followResponse.json();
-      console.log('Followed user:', data);
-
-      // Update UI and status
       isFollowing = true;
-      updateFollowButton();
     }
+
+    updateFollowButton();
+
+    // Fetch and render updated profile data (for updated follower count, etc.)
     const queryString = new URLSearchParams(defaultProfileParams).toString();
     const url = `${singleProfileUrl}/${userId}?${queryString}`;
     const updatedProfile = await fetch(url, {
@@ -143,16 +148,13 @@ followButton.addEventListener('click', async () => {
     if (!updatedProfile.ok) {
       throw new Error('Failed to fetch updated profile');
     }
-    const updatedData = await updatedProfile.json();
-    console.log('Updated profile data:', updatedData.data);
 
-    renderFollowers(updatedData.data.followers || []); // Render updated followers
+    const updatedData = await updatedProfile.json();
+    renderFollowers(updatedData.data.followers || []);
   } catch (error) {
     console.error('Error following/unfollowing user:', error);
     alert('Something went wrong. Please try again.');
   } finally {
-    // Unlock button after operation
-    // regardless of success or failure
     followButton.disabled = false;
   }
 });

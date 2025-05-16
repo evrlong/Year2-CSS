@@ -7,7 +7,7 @@
       src="https://kit.fontawesome.com/2b623f016d.js"
       crossorigin="anonymous"
     ></script>
-    <title class="pageTitle">SOME | PROFILE</title>
+    <title class="profileTitle">SOME | PROFILE</title>
     <link href="../css/style.css" rel="stylesheet" />
   </head>
 
@@ -20,63 +20,66 @@
       class="container flex justify-start min-w-full flex-col sm:flex-row p-8"
     >
       <!-- Left column(profile)-->
-      <section
-        class="profile-section bg-white/10 backdrop-blur-md mb-10 sm:mr-8 rounded-2xl shadow-lg p-6 w-full max-w-xs mx-auto flex flex-col items-center space-y-4 border-y-4 border-green-500"
-      >
-        <img
-          id="profileImg"
-          class="rounded-full h-32 w-32 object-cover ring-2 ring-green-500"
-          alt="Profile Image"
-        />
-        <h2
-          id="username"
-          class="text-xl font-medium text-gray-800 text-center"
-        ></h2>
-        <p id="email" class="text-sm text-gray-200 text-center"></p>
-
-        <button
-          id="followButton"
-          class="px-5 py-2 rounded-full bg-green-500 text-white hover:bg-green-600 transition"
+      <section class="sm:mr-8">
+        <div
+          class="profile-section bg-white/10 backdrop-blur-md mb-10 rounded-2xl shadow-lg p-6 w-full max-w-xs mx-auto flex flex-col items-center space-y-4 border-y-4 border-green-500"
         >
-          <i class="fa-solid fa-user-plus"></i>
-        </button>
+          <img
+            id="profileImg"
+            class="rounded-full h-32 w-32 object-cover ring-2 ring-green-500"
+            alt="Profile Image"
+          />
+          <h2
+            id="username"
+            class="text-xl font-medium text-gray-800 text-center"
+          ></h2>
+          <p id="email" class="text-sm text-gray-200 text-center"></p>
 
-        <!-- Followers -->
-        <div class="w-full">
-          <h3
-            id="followersTitle"
-            class="text-sm font-semibold text-gray-100 text-center mb-2"
+          <button
+            id="followButton"
+            class="px-5 py-2 rounded-full bg-green-500 text-white hover:bg-green-600 transition"
           >
-            Followers
-          </h3>
-          <div
-            id="followersContainer"
-            class="flex flex-wrap gap-1 justify-center"
-          ></div>
-        </div>
+            <i class="fa-solid fa-user-plus"></i>
+          </button>
 
-        <!-- Following -->
-        <div class="w-full">
-          <h3
-            id="followingTitle"
-            class="text-sm font-semibold text-gray-100 text-center mb-2"
-          >
-            Following
-          </h3>
-          <div
-            id="followingContainer"
-            class="flex flex-wrap gap-1 justify-center"
-          ></div>
+          <!-- Followers -->
+          <div class="w-full">
+            <h3
+              id="followersTitle"
+              class="text-sm font-semibold text-gray-100 text-center mb-2"
+            >
+              Followers
+            </h3>
+            <div
+              id="followersContainer"
+              class="flex flex-wrap gap-1 justify-center"
+            ></div>
+          </div>
+
+          <!-- Following -->
+          <div class="w-full">
+            <h3
+              id="followingTitle"
+              class="text-sm font-semibold text-gray-100 text-center mb-2"
+            >
+              Following
+            </h3>
+            <div
+              id="followingContainer"
+              class="flex flex-wrap gap-1 justify-center"
+            ></div>
+          </div>
         </div>
       </section>
 
       <!-- Right column(activity) -->
       <div id="createPost-container"></div>
-      <section
+
+      <!-- Edit post PopUp-->
+      <div
         id="popup"
         class="hidden fixed top-0 left-0 w-screen h-screen bg-gray-700 bg-opacity-80 flex items-center justify-center z-50"
       >
-        <!-- Edit post-->
         <div
           id="editPostForm"
           class="bg-white rounded-lg shadow-lg p-8 w-96 h-auto"
@@ -125,57 +128,16 @@
             Save Changes
           </button>
         </div>
-      </section>
-
-      <section class="sm:min-w-max flex flex-col rounded-lg h-full">
-        <!-- Post form -->
-        <div
-          id="postForm"
-          class="bg-blue-100 sm:min-w-max flex flex-col p-8 shadow-md rounded-lg h-full mb-4 hidden"
-        >
-          <div id="imageUrlContainer">
-            <input
-              id="postImageUrl"
-              type="url"
-              placeholder="Image URL"
-              class="border border-green-600 rounded-lg p-2 w-full h-10 my-2 focus:outline-none focus:ring focus:border-green-400"
-            />
-          </div>
-
-          <input
-            id="postTitle"
-            type="text"
-            placeholder="Title"
-            class="border border-green-600 rounded-lg p-2 w-full h-10 my-2 focus:outline-none focus:ring focus:border-green-400"
-          />
-
-          <textarea
-            id="postBody"
-            placeholder="Enter text..."
-            class="border border-green-600 rounded-lg p-2 w-full h-32 my-2 focus:outline-none focus:ring focus:border-green-400"
-          ></textarea>
-
-          <button
-            id="submitPostBtn"
-            type="button"
-            class="bg-green-500 font-semibold px-2 py-3 rounded-lg shadow-md w-full text-white hover:bg-blue-400"
-          >
-            Post
-          </button>
-        </div>
-      </section>
+      </div>
 
       <div
-        class="flex flex-col min-w-[80%] min-h-full rounded-lg h-full justify-center sm:justify-start items-center sm:items-stretch shadow-xl border-y-4 border-green-500 p-4 m-1 sm:m-0"
+        class="flex flex-col min-w-[80%] min-h-full rounded-lg h-full justify-center sm:justify-start items-center sm:items-stretch shadow-xl border-y-4 border-green-500 px-2 py-4 sm:py-8 sm:px-4 m-1 sm:m-0"
       >
         <div
           id="feedTitle"
-          class="font-bold text-white mb-2 sm:mb-0 flex items-center justify-between pt-6 rounded-2xl"
+          class="font-bold text-white mb-2 sm:mb-0 flex items-center justify-between pt-6 sm:pt-0 pb-8 rounded-2xl"
         >
-          <span
-            id="profileTitle"
-            class="w-full text-center text-xl pb-12"
-          ></span>
+          <span id="profileTitle" class="w-full text-center text-2xl"></span>
           <p
             id="profileDescription"
             class="text-sm font-semibold text-gray-100 text-center mb-2"
@@ -184,7 +146,7 @@
 
         <div
           id="postContainer"
-          class="flex flex-wrap justify-start items-start gap-4 sm:justify-start sm:ml-10 min-h-[300px]"
+          class="flex flex-wrap justify-start items-start gap-4 sm:justify-start min-h-[300px]"
         ></div>
 
         <p id="noResults" class="hidden text-center text-gray-500 mt-4">

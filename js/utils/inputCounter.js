@@ -1,3 +1,12 @@
+/**
+ * Sets up a character counter for an input element.
+ * Displays the current length and max length of the input.
+ * @param {HTMLInputElement} inputElement - The input element to attach the counter to.
+ * @param {number} maxLength - The maximum length of the input.
+ * @returns {void}
+ * @description This function creates a counter element next to the input field
+ */
+
 export function setupInputCounter(inputElement, maxLength) {
   if (!inputElement) return;
 

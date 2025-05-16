@@ -7,6 +7,10 @@ import { setupInputCounter } from '../inputCounter.js';
 const popup = document.getElementById('popup');
 const editPostForm = document.getElementById('editPostForm');
 
+/**
+ * Sets up event handlers for the edit post functionality.
+ * @function
+ */
 export function setupEditPostHandlers() {
   const closeBtn = document.getElementById('closePopupBtn');
   const deleteBtn = document.getElementById('deletePostBtn');
@@ -16,6 +20,11 @@ export function setupEditPostHandlers() {
     closeBtn.addEventListener('click', () => popup.classList.add('hidden'));
   }
 
+  /**
+   * Deletes a post when the delete button is clicked.
+   * @async
+   * @function
+   */
   deleteBtn.addEventListener('click', async () => {
     const postId = editPostForm.dataset.id;
     try {
@@ -31,6 +40,11 @@ export function setupEditPostHandlers() {
     }
   });
 
+  /**
+   * Saves the updated post when the save button is clicked.
+   * @async
+   * @function
+   */
   saveBtn.addEventListener('click', async () => {
     const postId = editPostForm.dataset.id;
     const maxTitleLength = 25;
@@ -76,6 +90,15 @@ export function setupEditPostHandlers() {
   });
 }
 
+/**
+ * Opens the edit post popup and populates it with the selected post's data.
+ * @param {Object} post - The post to edit.
+ * @param {string} post.id - The ID of the post.
+ * @param {string} post.title - The title of the post.
+ * @param {string} post.body - The body content of the post.
+ * @param {Object} post.media - The media object associated with the post.
+ * @param {string} [post.media.url] - The URL of the media image.
+ */
 export function openEditPopup(post) {
   editPostForm.dataset.id = post.id;
   document.getElementById('editPostTitle').value = post.title || '';

@@ -1,6 +1,15 @@
 import { regexConfig } from './config/regexConfig.js';
 
-// validate input fields
+/**
+ * Validates an input field against a regex pattern and minimum length.
+ * Displays appropriate success or error messages with icons.
+ *
+ * @param {HTMLInputElement} input - The input element to validate.
+ * @param {HTMLElement} message - The element to display validation messages.
+ * @param {number} minLength - Minimum number of characters required.
+ * @param {string} configKey - The key to access the regex pattern and error message from regexConfig.
+ * @returns {boolean} Returns true if input is valid and meets length requirement, false otherwise.
+ */
 export function validateInput(input, message, minLength, configKey) {
   const { pattern, error } = regexConfig[configKey];
   const value = input.value.trim();
@@ -54,7 +63,16 @@ export function validateInput(input, message, minLength, configKey) {
     return isValid && isValidLength;
   }
 }
-// validate confirm password
+
+/**
+ * Validates that the confirm password input matches the original password input.
+ * Displays success or error messages with icons accordingly.
+ *
+ * @param {HTMLInputElement} passwordInput - The original password input element.
+ * @param {HTMLInputElement} confirmInput - The confirm password input element.
+ * @param {HTMLElement} message - The element to display validation messages.
+ * @returns {boolean} Returns true if passwords match, false otherwise.
+ */
 export function validateConfirmPassword(passwordInput, confirmInput, message) {
   const password = passwordInput.value.trim();
   const confirm = confirmInput.value.trim();

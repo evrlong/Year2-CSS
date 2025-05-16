@@ -6,6 +6,19 @@ import { setupInputCounter } from '../js/utils/inputCounter.js';
 
 import { allPosts } from '../js/components/allPosts.js'; // ! Global variable to store all posts
 
+/**
+ * Loads the create post HTML component and injects it into the DOM.
+ *
+ * After loading the HTML from '/components/createPost.html', it injects the content
+ * into the element with the ID 'createPost-container', and initializes the post
+ * creation functionality using the provided render function and post data.
+ *
+ * @async
+ * @param {Function} renderPosts - A function to render posts in the UI.
+ * @param {Array<Object>} postsToRender - An array of post objects to be rendered.
+ *
+ * @returns {Promise<void>} A promise that resolves when the HTML is loaded and initialized.
+ */
 export async function addCreateToHtml(renderPosts, postsToRender) {
   try {
     const container = document.querySelector('#createPost-container');
@@ -23,6 +36,15 @@ export async function addCreateToHtml(renderPosts, postsToRender) {
   }
 }
 
+/**
+ * Initializes the create post form functionality.
+ *
+ * Sets up input counters, toggles form visibility, and handles form submission.
+ *
+ * @param {Function} renderPosts - Function to re-render posts after a new post is created.
+ * @param {Array<Object>} postsToRender - Current list of post objects to update with new posts.
+ */
+
 export function initCreatePost(renderPosts, postsToRender) {
   const createPostBtn = document.getElementById('createPostBtn');
   const postForm = document.getElementById('postForm');
@@ -33,7 +55,7 @@ export function initCreatePost(renderPosts, postsToRender) {
     return;
   }
 
-  // 🧮 Set up dynamic input counters
+  // Set up dynamic input counters
   const postTitleInput = document.getElementById('postTitle');
   const postBodyInput = document.getElementById('postBody');
   setupInputCounter(postTitleInput, 25);
@@ -41,6 +63,18 @@ export function initCreatePost(renderPosts, postsToRender) {
 
   // Toggle form visibility
   createPostBtn.addEventListener('click', () => {
+    const icon = createPostBtn.querySelector('i');
+
+    if (icon && icon.classList.contains('fa-xmark')) {
+      createPostBtn.classList.remove('bg-red-500', 'hover:bg-red-600');
+      createPostBtn.innerHTML =
+        '<i class="fa-solid fa-plus font-semibold text-2xl"></i>';
+    } else {
+      createPostBtn.classList.add('bg-red-500', 'hover:bg-red-600');
+      createPostBtn.innerHTML =
+        '<i class="fa-solid fa-xmark font-semibold text-2xl"></i>';
+    }
+
     postForm.classList.toggle('scale-0');
   });
 
@@ -67,7 +101,6 @@ export function initCreatePost(renderPosts, postsToRender) {
       }
 
       const data = await response.json();
-      console.log('Post created successfully:', data);
 
       postsToRender.unshift(data.data);
       renderPosts(postsToRender);
@@ -84,6 +117,15 @@ export function initCreatePost(renderPosts, postsToRender) {
   });
 }
 
+/**
+ * Retrieves and validates the post data from the form inputs.
+ *
+ * Ensures title and body meet maximum length requirements.
+ * Falls back to default text and image if inputs are empty.
+ *
+ * @returns {Object|null} The post data object if valid, otherwise `null`.
+ */
+
 function getPostData() {
   const title = document.getElementById('postTitle').value.trim();
   const body = document.getElementById('postBody').value.trim();
@@ -94,12 +136,12 @@ function getPostData() {
 
   const postTitle =
     title.length > maxTitleLength
-      ? title.slice(0, maxTitleLength).trim() + '…'
+      ? title.slice(0, maxTitleLength).trim()
       : title || 'Ingen tittel';
 
   const postBody =
     body.length > maxBodyLength
-      ? body.slice(0, maxBodyLength).trim() + '…'
+      ? body.slice(0, maxBodyLength).trim()
       : body || 'No text';
 
   const postMediaUrl =
@@ -137,19 +179,18 @@ function getPostData() {
   };
 }
 
-function isValidUrl(url) {
-  const urlPattern = /^(https?):\/\/[^\s$.?#].[^\s]*$/i;
-  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
-  return (
-    urlPattern.test(url) && imageExtensions.some((ext) => url.endsWith(ext))
-  );
-}
+/**
+ * Clears all input fields in the create post form.
+ */
 
 function resetForm() {
   document.getElementById('postTitle').value = '';
   document.getElementById('postBody').value = '';
   document.getElementById('postImageUrl').value = '';
 }
+/**
+ * Closes the create post form by adding the 'scale-0' class.
+ */
 
 function closeForm() {
   const postForm = document.getElementById('postForm');

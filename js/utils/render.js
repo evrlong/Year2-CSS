@@ -1,4 +1,4 @@
-//dom
+// dom
 import { createPostCard } from './dom/postcard.js';
 import {
   createFollowerCard,
@@ -7,6 +7,15 @@ import {
 
 import { handleFeedback } from './handlers/feedback.js';
 
+/**
+ * Renders the user's profile data including avatar, username, and email.
+ * Sets a default avatar if the image fails to load.
+ *
+ * @param {Object} data - The profile data object.
+ * @param {HTMLImageElement} imageElement - The image element for the avatar.
+ * @param {HTMLElement} usernameElement - The element to display the username.
+ * @param {HTMLElement} emailElement - The element to display the email.
+ */
 export function renderProfileData(
   data,
   imageElement,
@@ -18,7 +27,7 @@ export function renderProfileData(
     const imageUrl = data.avatar?.url || '../img/avatars/catavatar.png';
     imageElement.src = imageUrl || '../img/avatars/catavatar.png';
 
-    // Handle image error (if the image URL is broken or incorrect)
+    // Handle image load error (fallback to default avatar)
     imageElement.onerror = function () {
       if (imageElement.src !== '../img/avatars/catavatar.png') {
         console.error('Profile Image failed to load, using default avatar.');
@@ -34,14 +43,17 @@ export function renderProfileData(
     // Set other profile data
     usernameElement.textContent = data.name || 'No username available';
     emailElement.textContent = data.email || 'No email available';
-
-    console.log('Profile data rendered:', data);
   } else {
     console.error('No profile data found');
     handleFeedback('No profile data found', 'warning');
   }
 }
 
+/**
+ * Renders posts in the feed by creating and appending post cards to the container.
+ *
+ * @param {Array<Object>} posts - Array of post objects to render.
+ */
 export function renderFeedPosts(posts) {
   const postContainer = document.getElementById('postContainer');
   postContainer.innerHTML = '';
@@ -51,7 +63,14 @@ export function renderFeedPosts(posts) {
   });
 }
 
-//list followers
+/**
+ * Renders a list of followers with an optional maximum number to show.
+ * Updates the followers count in the UI.
+ *
+ * @param {Array<Object>} followers - Array of follower objects.
+ * @param {number} [maxToShow=15] - Maximum number of followers to display.
+ * @returns {number} The total number of followers.
+ */
 export function renderFollowers(followers, maxToShow = 15) {
   const followersContainer = document.getElementById('followersContainer');
   const followersTitle = document.getElementById('followersTitle');
@@ -65,11 +84,17 @@ export function renderFollowers(followers, maxToShow = 15) {
   return followers.length;
 }
 
-//list following
+/**
+ * Renders a list of following users with an optional maximum number to show.
+ * Updates the following count in the UI.
+ *
+ * @param {Array<Object>} following - Array of following user objects.
+ * @param {number} [maxToShow=15] - Maximum number of users to display.
+ */
 export function renderFollowing(following, maxToShow = 15) {
   const followingTitle = document.getElementById('followingTitle');
   const followingCount = following.length;
-  console.log('Following count:', followingCount);
+
   followingTitle.textContent = 'Following (' + followingCount + ')';
 
   const followingContainer = document.getElementById('followingContainer');

@@ -1,8 +1,19 @@
 import { fallbackImage } from '../../components/fallbackImage.js';
 
+/**
+ * Creates a follower card element.
+ * @param {Object} follower - The follower object.
+ * @param {string} follower.name - The name of the follower.
+ * @param {Object} follower.avatar - The avatar object of the follower.
+ * @param {string} [follower.avatar.url] - The URL of the avatar image.
+ * @returns {Promise<HTMLElement>} - A Promise that resolves to the follower card element.
+ */
 export function createFollowerCard(follower) {
-  //count following
-
+  /**
+   * Checks if an image URL is compatible by attempting to load the image.
+   * @param {string} url - The URL of the image.
+   * @returns {Promise<boolean>} - A Promise that resolves to true if the image loads successfully, otherwise false.
+   */
   const isImageCompatible = (url) => {
     return new Promise((resolve) => {
       const img = new Image();
@@ -31,7 +42,20 @@ export function createFollowerCard(follower) {
   return followerCard;
 }
 
+/**
+ * Creates a following card element.
+ * @param {Object} following - The following object.
+ * @param {string} following.name - The name of the following user.
+ * @param {Object} following.avatar - The avatar object of the following user.
+ * @param {string} [following.avatar.url] - The URL of the avatar image.
+ * @returns {Promise<HTMLElement>} - A Promise that resolves to the following card element.
+ */
 export function createFollowingCard(following) {
+  /**
+   * Checks if an image URL is compatible by attempting to load the image.
+   * @param {string} url - The URL of the image.
+   * @returns {Promise<boolean>} - A Promise that resolves to true if the image loads successfully, otherwise false.
+   */
   const isImageCompatible = (url) => {
     return new Promise((resolve) => {
       const img = new Image();

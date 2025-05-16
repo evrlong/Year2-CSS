@@ -30,7 +30,6 @@ export async function checkIfFollowing(userId) {
     }
 
     const data = await response.json();
-    console.log('Profile data:', data);
 
     const localStorageUser = localStorage.getItem('profileData');
     const parsedUser = JSON.parse(localStorageUser);
@@ -40,7 +39,7 @@ export async function checkIfFollowing(userId) {
       console.error('Current user name not found in localStorage');
       return false;
     }
-    console.log('Followers data:', data);
+
     const isFollowing = data.data.followers.some(
       (follower) => follower.name === currentUserName,
     );
