@@ -2,8 +2,6 @@
 
 A easy and modern social media site where users can log in, follow others, and share their own posts. Built using HTML, JavaScript and Tailwind CSS.
 
-2. Spesifiser Vite i teknologistack
-
 ## Features
 
 - **User login:** Log in to access the site.
