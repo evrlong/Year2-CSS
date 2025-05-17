@@ -1,56 +1,120 @@
-// auth
+/**
+ * @file feed.js
+ * @description Main feed logic for fetching, rendering, filtering, and paginating posts.
+ * Handles authentication, layout initialization, post creation, search, and error handling.
+ */
+
+// Authentication
 import { requireAuth } from '../auth/auth.js';
 
-// api
+// Layout components
+import { loadNavbar } from '../../components/navbar.js';
+import { loadFooter } from '../../components/footer.js';
+
+// Post creation and management
+import {
+  initCreatePost,
+  addCreateToHtml,
+} from '../../components/createPost.js';
+import { allPosts } from '../components/allPosts.js';
 import { fetchFeedPosts } from '../api/fetch.js';
 
-// utils
+// Utility functions
 import { renderFeedPosts } from '../utils/render.js';
 import { handleSearch, debounce } from '../utils/searchbar.js';
+import { setupEditPostHandlers } from '../utils/handlers/editPostHandlers.js';
 
+// Initialization
+loadNavbar();
+loadFooter();
 requireAuth();
+setupEditPostHandlers();
+addCreateToHtml(renderFeedPosts, allPosts);
 
-// DOM-elementer
+// DOM elements
 const searchInput = document.getElementById('searchInput');
 const noResults = document.getElementById('noResults');
 const filterSelect = document.getElementById('filterSelect');
-const allPosts = []; // Global array for original post-data
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+const postContainer = document.getElementById('postContainer');
 
-// Hent og vis alle innlegg
-fetchFeedPosts().then((posts) => {
-  if (!Array.isArray(posts)) {
-    console.error('Ugyldige data fra fetchFeedPosts:', posts);
+// User info
+const localStorageUser = localStorage.getItem('profileData');
+const parsedUser = JSON.parse(localStorageUser);
+const currentUserName = parsedUser.name;
+
+// Pagination
+let currentPage = 1;
+const limit = 20;
+
+/**
+ * Handle live post searching via debounced input.
+ */
+searchInput.addEventListener(
+  'input',
+  debounce(() => handleSearch(searchInput, noResults, loadMoreBtn), 300),
+);
+
+/**
+ * Fetch and render the initial batch of posts on page load.
+ * If no posts are found, show a "no results" message.
+ */
+fetchFeedPosts(limit, currentPage).then((posts) => {
+  if (!Array.isArray(posts) || posts.length === 0) {
     noResults.classList.remove('hidden');
+    loadMoreBtn.classList.add('hidden');
+    postContainer.appendChild(noResults);
     return;
   }
 
-  allPosts.push(...posts); // Lagre for senere filtrering/søk
-  renderFeedPosts(allPosts); // Første visning
+  allPosts.push(...posts);
+  renderFeedPosts(allPosts);
 
-  // Start søk når innlegg er lastet
-  const postCards = document.querySelectorAll('.post-card');
-  searchInput.addEventListener(
-    'input',
-    debounce(() => handleSearch(postCards, searchInput, noResults), 300),
-  );
+  if (posts.length < limit) {
+    loadMoreBtn.classList.add('hidden');
+  }
 });
 
-// Håndter filterendring
+/**
+ * Load additional posts on click of "Load More" button.
+ * Updates page count and appends new posts to feed.
+ */
+loadMoreBtn.addEventListener('click', async () => {
+  currentPage++;
+  const morePosts = await fetchFeedPosts(limit, currentPage);
+
+  if (morePosts.length === 0) {
+    loadMoreBtn.classList.add('hidden');
+    return;
+  }
+
+  allPosts.push(...morePosts);
+  renderFeedPosts(allPosts);
+
+  if (morePosts.length < limit) {
+    loadMoreBtn.classList.add('hidden');
+  }
+
+  handleSearch(searchInput, noResults, loadMoreBtn);
+});
+
+/**
+ * Apply selected filter to all loaded posts.
+ * Sorts by date or title depending on the dropdown value.
+ * @param {Event} event - The change event from the select element.
+ */
 filterSelect.addEventListener('change', (event) => {
   const selectedFilter = event.target.value;
-  let filteredPosts = [...allPosts]; // Lag kopi
+  let filteredPosts = [...allPosts];
 
   if (selectedFilter === 'date') {
     filteredPosts.sort((a, b) => new Date(b.created) - new Date(a.created));
-  } else if (selectedFilter === 'likes') {
-    filteredPosts.sort(
-      (a, b) => (b._count?.reactions || 0) - (a._count?.reactions || 0),
-    );
-  } else if (selectedFilter === 'comments') {
-    filteredPosts.sort(
-      (a, b) => (b._count?.comments || 0) - (a._count?.comments || 0),
+  } else if (selectedFilter === 'title') {
+    filteredPosts.sort((a, b) =>
+      a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }),
     );
   }
 
   renderFeedPosts(filteredPosts);
+  handleSearch(searchInput, noResults, loadMoreBtn);
 });

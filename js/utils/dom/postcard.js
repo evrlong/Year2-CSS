@@ -1,91 +1,146 @@
+import { handleError } from '../handlers/errorHandler.js';
+import { fallbackImage } from '../../components/fallbackImage.js';
+import { openEditPopup } from '../handlers/editPostHandlers.js';
+
+const profileData = JSON.parse(localStorage.getItem('profileData'));
+const profileName = profileData?.name;
+
+/**
+ * Creates a post card DOM element for a given post object.
+ *
+ * The card includes author info, post date, title, image, body snippet,
+ * and an edit button if the post belongs to the logged-in user.
+ *
+ * @param {Object} post - The post object containing data for rendering.
+ * @param {Object} post.author - The author object.
+ * @param {string} post.author.name - The author's username.
+ * @param {Object} [post.author.avatar] - The author's avatar image object.
+ * @param {string} [post.author.avatar.url] - URL of the author's avatar image.
+ * @param {string} post.created - ISO string of the post creation date.
+ * @param {string} post.title - The post's title.
+ * @param {string} post.body - The post's body content.
+ * @param {Array<string>} [post.tags] - List of tags for the post.
+ * @param {Object} [post.media] - Post media object.
+ * @param {string} [post.media.url] - URL to the post's image.
+ * @param {string} [post.media.alt] - Alternative text for the image.
+ * @returns {HTMLDivElement} The constructed post card element.
+ */
 export function createPostCard(post) {
   const card = document.createElement('div');
   card.className =
-    ' post-card bg-white min-h-52 w-140 m-4 shadow-md rounded-lg w-60';
+    'post-card bg-white w-full sm:w-60 rounded-2xl shadow-md overflow-hidden transition-shadow hover:shadow-lg duration-200';
 
-  // Top profile/date row
+  // Top row containing profile image, link, and post date
   const topRow = document.createElement('div');
   topRow.className =
     'bg-white rounded-t-md p-2 flex justify-between items-center text-xs';
 
-  // Profile image
+  // Profile image element
   const profileImg = document.createElement('img');
-  profileImg.src =
-    post.author.avatar.url &&
-    typeof post.author.avatar.url === 'string' &&
-    post.author.avatar.url.trim().startsWith('http')
-      ? post.author.avatar.url
-      : '../img/noimg.png';
+  profileImg.src = post.author?.avatar?.url || fallbackImage;
   profileImg.alt = `profile picture of ${post.author?.name || 'user'}`;
   profileImg.className =
     'bg-blue-100 shadow-md rounded-full h-7 w-7 object-cover';
 
-  // Lag lenke rundt profilbildet
+  profileImg.onerror = () => {
+    try {
+      if (profileImg.src !== fallbackImage) {
+        throw new Error(
+          `Following user (${post.author?.name}) profile image failed to load.`,
+        );
+      }
+    } catch (error) {
+      handleError(
+        error,
+        `Following user (${post.author?.name}) profile image failed to load.`,
+        'warning',
+      );
+      profileImg.src = fallbackImage;
+    }
+  };
+
   const profileLink = document.createElement('a');
   profileLink.href = `../viewProfile/index.html?user=${encodeURIComponent(post.author.name)}`;
   profileLink.appendChild(profileImg);
 
-  // Created date
   const createdDate = post.created?.split('T')[0] || 'Date';
   const dateText = document.createTextNode(createdDate);
 
-  // Legg til i topRow
-  topRow.appendChild(profileLink); // Bildet med lenke
+  topRow.appendChild(profileLink);
   topRow.appendChild(dateText);
 
-  // Content image
+  // Edit button visible only on user's own posts
+  if (post.author.name === profileName) {
+    const editButton = document.createElement('button');
+    editButton.className =
+      'edit-button px-2 py-1 rounded-md fa-solid fa-pen-to-square';
+    editButton.style.fontSize = '10px';
+    editButton.style.marginLeft = '10px';
+    editButton.style.cursor = 'pointer';
+    editButton.onclick = () => openEditPopup(post);
+    topRow.appendChild(editButton);
+  }
+
+  // Post title
+  const titleWrapper = document.createElement('div');
+  titleWrapper.className = 'bg-gray-100 px-2 py-1 text-center';
+  const title = document.createElement('h3');
+  title.className =
+    'text-sm font-bold text-gray-800 truncate group-hover:text-green-400 transition-colors';
+
+  const maxTitleLength = 25; // Maximum title length
+  const maxBodyLength = 250; // Maximum body length
+
+  title.textContent = post.title.slice(0, maxTitleLength).trim() || '';
+  titleWrapper.appendChild(title);
+
+  // Post image
   const contentImg = document.createElement('img');
-  contentImg.src =
-    post.media &&
-    typeof post.media.url === 'string' &&
-    post.media.url.trim().startsWith('http')
-      ? post.media.url
-      : '../img/noimg.jpg';
+  const contentImageUrl = post.media?.url || fallbackImage;
+  contentImg.src = contentImageUrl;
+  contentImg.alt = post.media?.alt || 'Default fallback image';
+  contentImg.className =
+    'aspect-[4/3] w-full object-cover group-hover:scale-105 transition-transform duration-300';
 
-  contentImg.alt =
-    post.media && typeof post.media.alt === 'string'
-      ? post.media.alt
-      : 'Default fallback image';
+  contentImg.onerror = () => {
+    if (contentImg.src !== fallbackImage) {
+      console.error('Post image failed to load, using fallback image.');
+      contentImg.src = fallbackImage;
+    }
+  };
 
-  contentImg.className = 'h-40 w-full w-3 mx-auto object-cover ring-green-500';
-
-  // Bottom content
+  // Bottom content with post body snippet
   const bottom = document.createElement('div');
-  bottom.className = 'bg-white py-1 rounded-b-md';
-
-  const heartIcon = document.createElement('i');
-  heartIcon.className = 'fa-solid fa-heart fa-sm px-0.5 pl-4 text-red-600';
-
-  const commentIcon = document.createElement('i');
-  commentIcon.className = 'fa-regular fa-comment fa-sm px-0.5';
+  bottom.className =
+    'bg-white py-1 rounded-b-md h-36 flex flex-col justify-between';
 
   const textWrapper = document.createElement('div');
-  textWrapper.className = 'flex flex-row';
+  textWrapper.className = 'flex flex-row w-full justify-start items-center';
 
   const paragraph = document.createElement('p');
-  paragraph.className = 'text-[12px] px-0.5 py-1 pl-4';
+  paragraph.className =
+    'break-all text-[12px] px-1 py-1 text-gray-700 break-words whitespace-normal w-full';
 
   const userSpan = document.createElement('span');
   userSpan.className = 'pr-1 font-bold';
   userSpan.textContent = `@${post.author?.name || 'user'}:`;
-
-  const postText = document.createTextNode(post.body || '');
+  const postText = document.createTextNode(
+    post.body.slice(0, maxBodyLength).trim() + '…' || '',
+  );
 
   paragraph.appendChild(userSpan);
-
   paragraph.appendChild(postText);
   textWrapper.appendChild(paragraph);
 
-  bottom.appendChild(heartIcon);
-  bottom.appendChild(commentIcon);
   bottom.appendChild(textWrapper);
 
-  // Put it all together
+  // Assemble card
   card.appendChild(topRow);
+  card.appendChild(titleWrapper);
   card.appendChild(contentImg);
   card.appendChild(bottom);
 
-  // Legg til data-attributter for søk
+  // Data attributes for filtering and searching
   card.dataset.title = post.title || '';
   card.dataset.body = post.body || '';
   card.dataset.tags = (post.tags || []).join(',');

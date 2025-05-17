@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/createPost.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/createPost.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { handleFeedback } from '../js/utils/handlers/feedback.js';
+import { handleError } from '../js/utils/handlers/errorHandler.js';
+import { postUrl } from '../js/api/api.js';
+import { defaultHeaders } from '../js/api/config.js';
+import { setupInputCounter } from '../js/utils/inputCounter.js';
+
+import { allPosts } from '../js/components/allPosts.js'; // ! Global variable to store all posts
+
+/**
+ * Loads the create post HTML component and injects it into the DOM.
+ *
+ * After loading the HTML from '/components/createPost.html', it injects the content
+ * into the element with the ID 'createPost-container', and initializes the post
+ * creation functionality using the provided render function and post data.
+ *
+ * @async
+ * @param {Function} renderPosts - A function to render posts in the UI.
+ * @param {Array&lt;Object>} postsToRender - An array of post objects to be rendered.
+ *
+ * @returns {Promise&lt;void>} A promise that resolves when the HTML is loaded and initialized.
+ */
+export async function addCreateToHtml(renderPosts, postsToRender) {
+  try {
+    const container = document.querySelector('#createPost-container');
+    const response = await fetch('/components/createPost.html');
+    if (!response.ok) throw new Error('Failed to load createPost.html');
+
+    const html = await response.text();
+    container.innerHTML = html;
+
+    // Initialize the post creation functionality after the HTML is added
+    initCreatePost(renderPosts, postsToRender);
+  } catch (error) {
+    console.error('Error loading create post HTML:', error);
+    handleError(error.message, 'default');
+  }
+}
+
+/**
+ * Initializes the create post form functionality.
+ *
+ * Sets up input counters, toggles form visibility, and handles form submission.
+ *
+ * @param {Function} renderPosts - Function to re-render posts after a new post is created.
+ * @param {Array&lt;Object>} postsToRender - Current list of post objects to update with new posts.
+ */
+
+export function initCreatePost(renderPosts, postsToRender) {
+  const createPostBtn = document.getElementById('createPostBtn');
+  const postForm = document.getElementById('postForm');
+  const submitBtn = document.getElementById('submitPostBtn');
+
+  if (!createPostBtn || !postForm || !submitBtn) {
+    console.error('Required elements are missing from the DOM.');
+    return;
+  }
+
+  // Set up dynamic input counters
+  const postTitleInput = document.getElementById('postTitle');
+  const postBodyInput = document.getElementById('postBody');
+  setupInputCounter(postTitleInput, 25);
+  setupInputCounter(postBodyInput, 250);
+
+  // Toggle form visibility
+  createPostBtn.addEventListener('click', () => {
+    const icon = createPostBtn.querySelector('i');
+
+    if (icon &amp;&amp; icon.classList.contains('fa-xmark')) {
+      createPostBtn.classList.remove('bg-red-500', 'hover:bg-red-600');
+      createPostBtn.innerHTML =
+        '&lt;i class="fa-solid fa-plus font-semibold text-2xl">&lt;/i>';
+    } else {
+      createPostBtn.classList.add('bg-red-500', 'hover:bg-red-600');
+      createPostBtn.innerHTML =
+        '&lt;i class="fa-solid fa-xmark font-semibold text-2xl">&lt;/i>';
+    }
+
+    postForm.classList.toggle('scale-0');
+  });
+
+  // Submit the new post
+  submitBtn.addEventListener('click', async (event) => {
+    event.preventDefault();
+    const postData = getPostData();
+
+    if (!postData) return;
+
+    try {
+      const response = await fetch(postUrl, {
+        method: 'POST',
+        headers: defaultHeaders,
+        body: JSON.stringify(postData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errorMessage =
+          errorData.errors?.[0]?.message || 'Failed to create post';
+        handleError(errorMessage, 'default');
+        return;
+      }
+
+      const data = await response.json();
+
+      postsToRender.unshift(data.data);
+      renderPosts(postsToRender);
+      resetForm();
+      handleFeedback('New post created successfully!', 'success');
+      closeForm();
+    } catch (error) {
+      console.error('Error creating post:', error);
+      handleError(
+        error.message || 'An error occurred while creating post',
+        'default',
+      );
+    }
+  });
+}
+
+/**
+ * Retrieves and validates the post data from the form inputs.
+ *
+ * Ensures title and body meet maximum length requirements.
+ * Falls back to default text and image if inputs are empty.
+ *
+ * @returns {Object|null} The post data object if valid, otherwise `null`.
+ */
+
+function getPostData() {
+  const title = document.getElementById('postTitle').value.trim();
+  const body = document.getElementById('postBody').value.trim();
+  const mediaUrl = document.getElementById('postImageUrl').value.trim();
+
+  const maxTitleLength = 25;
+  const maxBodyLength = 250;
+
+  const postTitle =
+    title.length > maxTitleLength
+      ? title.slice(0, maxTitleLength).trim()
+      : title || 'Ingen tittel';
+
+  const postBody =
+    body.length > maxBodyLength
+      ? body.slice(0, maxBodyLength).trim()
+      : body || 'No text';
+
+  const postMediaUrl =
+    mediaUrl ||
+    'https://raw.githubusercontent.com/evrlong/Year2-CSS/js2/img/avatars/catavatar.png';
+
+  const isFallbackImage =
+    postMediaUrl ===
+    'https://raw.githubusercontent.com/evrlong/Year2-CSS/js2/img/avatars/catavatar.png';
+
+  if (postTitle.length > maxTitleLength) {
+    handleFeedback(
+      `Title is too long. Maximum length is ${maxTitleLength} characters.`,
+      'warning',
+    );
+    return null;
+  }
+
+  if (postBody.length > maxBodyLength) {
+    handleFeedback(
+      `Body is too long. Maximum length is ${maxBodyLength} characters.`,
+      'warning',
+    );
+    return null;
+  }
+
+  return {
+    title: postTitle,
+    body: postBody,
+    tags: ['filterEvr'],
+    media: {
+      url: postMediaUrl,
+      alt: 'Bilde',
+    },
+  };
+}
+
+/**
+ * Clears all input fields in the create post form.
+ */
+
+function resetForm() {
+  document.getElementById('postTitle').value = '';
+  document.getElementById('postBody').value = '';
+  document.getElementById('postImageUrl').value = '';
+}
+/**
+ * Closes the create post form by adding the 'scale-0' class.
+ */
+
+function closeForm() {
+  const postForm = document.getElementById('postForm');
+  setTimeout(() => {
+    postForm.classList.add('scale-0');
+  }, 10);
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-fetch.html">fetch</a></li><li><a href="module-login.html">login</a></li><li><a href="module-register.html">register</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:DOMContentLoaded">DOMContentLoaded</a></li></ul><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#addCreateToHtml">addCreateToHtml</a></li><li><a href="global.html#addLogoutListeners">addLogoutListeners</a></li><li><a href="global.html#apiKey">apiKey</a></li><li><a href="global.html#checkIfFollowing">checkIfFollowing</a></li><li><a href="global.html#closeForm">closeForm</a></li><li><a href="global.html#createFollowerCard">createFollowerCard</a></li><li><a href="global.html#createFollowingCard">createFollowingCard</a></li><li><a href="global.html#createPostCard">createPostCard</a></li><li><a href="global.html#debounce">debounce</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#getDefaultHeaders">getDefaultHeaders</a></li><li><a href="global.html#getPostData">getPostData</a></li><li><a href="global.html#getPostUrl">getPostUrl</a></li><li><a href="global.html#handleError">handleError</a></li><li><a href="global.html#handleFeedback">handleFeedback</a></li><li><a href="global.html#handleSearch">handleSearch</a></li><li><a href="global.html#initCreatePost">initCreatePost</a></li><li><a href="global.html#isLoggedIn">isLoggedIn</a></li><li><a href="global.html#loadEditPost">loadEditPost</a></li><li><a href="global.html#loadFooter">loadFooter</a></li><li><a href="global.html#loadNavbar">loadNavbar</a></li><li><a href="global.html#logOut">logOut</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#openEditPopup">openEditPopup</a></li><li><a href="global.html#renderFeedPosts">renderFeedPosts</a></li><li><a href="global.html#renderFollowers">renderFollowers</a></li><li><a href="global.html#renderFollowing">renderFollowing</a></li><li><a href="global.html#renderProfileData">renderProfileData</a></li><li><a href="global.html#resetForm">resetForm</a></li><li><a href="global.html#setupEditPostHandlers">setupEditPostHandlers</a></li><li><a href="global.html#setupInputCounter">setupInputCounter</a></li><li><a href="global.html#setupMenuToggle">setupMenuToggle</a></li><li><a href="global.html#toggleVisibility">toggleVisibility</a></li><li><a href="global.html#updateFollowButton">updateFollowButton</a></li><li><a href="global.html#updateNavbar">updateNavbar</a></li><li><a href="global.html#validateConfirmPassword">validateConfirmPassword</a></li><li><a href="global.html#validateInput">validateInput</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri May 16 2025 23:34:35 GMT+0200 (sentraleuropeisk sommertid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
