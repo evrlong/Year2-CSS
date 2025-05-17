@@ -1,0 +1,12 @@
+{
+  "source": {
+    "include": ["js", "components"],
+    "exclude": ["tailwind.config.js"],
+    "includePattern": ".+\\.js$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "opts": {
+    "destination": "./docs",
+    "recurse": true
+  }
+}
