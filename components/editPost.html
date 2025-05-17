@@ -1,0 +1,50 @@
+<!doctype html>
+
+<section
+  id="popup"
+  class="hidden fixed top-0 left-0 w-screen h-screen bg-gray-700 bg-opacity-80 flex items-center justify-center z-50"
+>
+  <!-- Edit post-->
+  <div id="editPostForm" class="bg-white rounded-lg shadow-lg p-8 w-96 h-auto">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold">Edit Post</h2>
+      <button id="closePopupBtn" class="text-gray-500 hover:text-gray-800">
+        <i class="fa-solid fa-xmark text-2xl"></i>
+      </button>
+    </div>
+
+    <input
+      id="editPostTitle"
+      type="text"
+      placeholder="Title"
+      class="border border-green-600 rounded-lg p-2 w-full h-10 my-2 focus:outline-none focus:ring focus:border-green-400"
+    />
+    <textarea
+      id="editPostBody"
+      placeholder="Enter text..."
+      class="border border-green-600 rounded-lg p-2 w-full h-32 my-2 focus:outline-none focus:ring focus:border-green-400"
+    ></textarea>
+
+    <input
+      id="editPostImageUrl"
+      type="url"
+      placeholder="Image URL"
+      class="border border-green-600 rounded-lg p-2 w-full h-10 my-2 focus:outline-none focus:ring focus:border-green-400"
+    />
+
+    <button
+      id="deletePostBtn"
+      type="button"
+      class="bg-red-500 font-semibold px-2 py-3 rounded-lg shadow-md w-full text-white hover:bg-red-400"
+    >
+      Delete Post
+    </button>
+    <button
+      id="saveEditBtn"
+      type="button"
+      class="bg-green-500 font-semibold px-2 py-3 rounded-lg shadow-md w-full text-white hover:bg-blue-400"
+    >
+      Save Changes
+    </button>
+  </div>
+</section>

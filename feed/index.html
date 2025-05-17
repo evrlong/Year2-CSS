@@ -17,7 +17,9 @@
       <!-- Navbar.html -->
       <div id="navbar-container"></div>
     </header>
-    <main class="container flex justify-center flex-col sm:flex-row h-full p-8">
+    <main
+      class="container flex justify-start sm:justify-center flex-col sm:flex-row min-h-screen min-w-full p-8"
+    >
       <!-- Hidden popups -->
       <div
         id="popup"
@@ -73,86 +75,66 @@
           </button>
         </div>
       </div>
-      <!-- Left column(Create post)-->
-      <div class="sm:min-w-max flex flex-col rounded-lg h-full">
-        <!-- Toggle button -->
-        <button
-          id="createPostBtn"
-          class="bg-blue-600 text-white min-w-max text-sm font-semibold px-4 py-2 rounded-lg shadow-md mb-4 hover:bg-green-600"
-        >
-          Create New Post
-        </button>
 
-        <!-- Post form -->
+      <div id="createPost-container"></div>
+
+      <!-- Searchbar and Feed-->
+
+      <div
+        class="flex flex-col min-w-[80%] min-h-full rounded-lg h-full justify-center sm:justify-start items-center sm:items-stretch shadow-xl border-y-4 border-green-500 p-4 sm:p-8 m-1 sm:m-0"
+      >
         <div
-          id="postForm"
-          class="bg-blue-100 sm:min-w-max flex flex-col p-8 shadow-md rounded-lg h-full mb-4 hidden"
+          id="feedTitle"
+          class="text-4xl font-bold text-white mb-2 sm:mb-0 flex items-center justify-between px-6 py-4 rounded-2xl"
         >
-          <div id="imageUrlContainer">
-            <input
-              id="postImageUrl"
-              type="ur"
-              placeholder="Image URL"
-              class="border border-green-600 rounded-lg p-2 w-full h-10 my-2 focus:outline-none focus:ring focus:border-green-400"
-            />
-          </div>
-
-          <input
-            id="postTitle"
-            type="text"
-            placeholder="Title"
-            class="border border-green-600 rounded-lg p-2 w-full h-10 my-2 focus:outline-none focus:ring focus:border-green-400"
-          />
-
-          <textarea
-            id="postBody"
-            placeholder="Enter text..."
-            class="border border-green-600 rounded-lg p-2 w-full h-32 my-2 focus:outline-none focus:ring focus:border-green-400"
-          ></textarea>
-
-          <button
-            id="submitPostBtn"
-            type="button"
-            class="bg-green-500 font-semibold px-2 py-3 rounded-lg shadow-md w-full text-white hover:bg-blue-400"
-          >
-            Post
-          </button>
+          <span class="w-full text-center">Feed</span>
         </div>
-      </div>
-      <!-- Searchbar and -->
-      <div>
+
+        <div
+          id="feedDescription"
+          class="text-base text-white/90 mb-6 sm:mb-0 px-5 py-3 rounded-xl max-w-2xl mx-auto text-center"
+        >
+          Browse through posts and explore the latest updates from the
+          community.
+        </div>
+
         <!-- Right column(activty) -->
         <div
-          class="bg-blue-100 flex flex-wrap shadow-md rounded-lg h-auto p-4 p-1 sm:mt-0 sm:ml-10"
+          id="searchAndFilter"
+          class="flex flex-wrap h-auto w-full px-4 py-2 sm:p-4 m-1"
         >
           <div
-            class="container w-full min-w-min flex flex-wrap justify-between items-center mx-0.5"
+            class="container min-w-full flex flex-wrap justify-between items-center gap-2"
           >
             <input
               type="text"
               id="searchInput"
               placeholder="Search"
-              class="border border-green-600 rounded p-1 w-28 h-5 text-[12px] focus:outline-none focus:ring focus:border-green-400 my-2 sm:my-0"
+              class="border border-gray-300 rounded-md px-3 py-1 w-full sm:w-36 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200"
             />
 
             <select
-              class="border border-green-600 rounded w-24 focus:outline-none text-[12px] text-gray-700 focus:ring focus:border-green-400 sm:justify-end"
               id="filterSelect"
+              class="border border-gray-300 rounded-md px-2 py-1 w-36 text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200"
             >
-              <option value="date">Date</option>
-              <option value="comments">Comments</option>
-              <option value="likes">Likes</option>
+              <option value="date">Latest Posts</option>
+              <option value="title">Title (A–Z)</option>
             </select>
           </div>
         </div>
 
         <div
           id="postContainer"
-          class="bg-blue-100 flex flex-wrap shadow-md rounded-lg h-auto justify-center sm:p-8 p-1 mt-2 sm:ml-10 lg:justify-between"
+          class="flex flex-wrap justify-start items-start gap-4 justify-start pt-6 sm:ml-1 min-h-[300px]"
         ></div>
-        <p id="noResults" class="hidden text-center text-gray-500 mt-4">
-          Ingen treff.
-        </p>
+
+        <div
+          id="noResults"
+          class="hidden text-center font-semibold text-xl text-white my-44 sm:my-60 flex flex-col items-center justify-center"
+        >
+          No results found
+          <i class="fa-solid fa-thumbs-down px-4"></i>
+        </div>
         <div class="flex justify-center mt-4">
           <button
             id="loadMoreBtn"

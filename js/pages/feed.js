@@ -1,45 +1,69 @@
-// auth
+/**
+ * @file feed.js
+ * @description Main feed logic for fetching, rendering, filtering, and paginating posts.
+ * Handles authentication, layout initialization, post creation, search, and error handling.
+ */
+
+// Authentication
 import { requireAuth } from '../auth/auth.js';
 
-// api
-import { feedUrl } from '../api/api.js';
-import { apiKey } from '../api/config.js';
-import { getDefaultHeaders, defaultHeaders } from '../api/config.js';
-//fetch
+// Layout components
+import { loadNavbar } from '../../components/navbar.js';
+import { loadFooter } from '../../components/footer.js';
+
+// Post creation and management
+import {
+  initCreatePost,
+  addCreateToHtml,
+} from '../../components/createPost.js';
+import { allPosts } from '../components/allPosts.js';
 import { fetchFeedPosts } from '../api/fetch.js';
 
-// utils
+// Utility functions
 import { renderFeedPosts } from '../utils/render.js';
-import {
-  handleSearch,
-  debounce,
-  updateLoadMoreButton,
-} from '../utils/searchbar.js';
+import { handleSearch, debounce } from '../utils/searchbar.js';
+import { setupEditPostHandlers } from '../utils/handlers/editPostHandlers.js';
 
+// Initialization
+loadNavbar();
+loadFooter();
 requireAuth();
+setupEditPostHandlers();
+addCreateToHtml(renderFeedPosts, allPosts);
 
-// DOM-elementer
+// DOM elements
 const searchInput = document.getElementById('searchInput');
 const noResults = document.getElementById('noResults');
 const filterSelect = document.getElementById('filterSelect');
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+const postContainer = document.getElementById('postContainer');
 
-const allPosts = []; // Global array for original post-data
+// User info
+const localStorageUser = localStorage.getItem('profileData');
+const parsedUser = JSON.parse(localStorageUser);
+const currentUserName = parsedUser.name;
 
-// Søkelogikk med debounce
+// Pagination
+let currentPage = 1;
+const limit = 20;
+
+/**
+ * Handle live post searching via debounced input.
+ */
 searchInput.addEventListener(
   'input',
   debounce(() => handleSearch(searchInput, noResults, loadMoreBtn), 300),
 );
 
-// Pagination-oppsett
-let currentPage = 1;
-const limit = 20;
-
-// Hent og vis første innlegg
+/**
+ * Fetch and render the initial batch of posts on page load.
+ * If no posts are found, show a "no results" message.
+ */
 fetchFeedPosts(limit, currentPage).then((posts) => {
   if (!Array.isArray(posts) || posts.length === 0) {
     noResults.classList.remove('hidden');
     loadMoreBtn.classList.add('hidden');
+    postContainer.appendChild(noResults);
     return;
   }
 
@@ -51,7 +75,10 @@ fetchFeedPosts(limit, currentPage).then((posts) => {
   }
 });
 
-// load more btn
+/**
+ * Load additional posts on click of "Load More" button.
+ * Updates page count and appends new posts to feed.
+ */
 loadMoreBtn.addEventListener('click', async () => {
   currentPage++;
   const morePosts = await fetchFeedPosts(limit, currentPage);
@@ -64,95 +91,49 @@ loadMoreBtn.addEventListener('click', async () => {
   allPosts.push(...morePosts);
   renderFeedPosts(allPosts);
 
-  // Skjul "Last mer"-knappen hvis færre enn limit innlegg
   if (morePosts.length < limit) {
     loadMoreBtn.classList.add('hidden');
   }
 
-  // Kall på søkefunksjonen etter at nye innlegg er lagt til
   handleSearch(searchInput, noResults, loadMoreBtn);
 });
 
-// Filtrering
+/**
+ * Apply selected filter to all loaded posts.
+ * Sorts by date or title depending on the dropdown value.
+ * @param {Event} event - The change event from the select element.
+ */
 filterSelect.addEventListener('change', (event) => {
   const selectedFilter = event.target.value;
   let filteredPosts = [...allPosts];
 
   if (selectedFilter === 'date') {
     filteredPosts.sort((a, b) => new Date(b.created) - new Date(a.created));
-  } else if (selectedFilter === 'likes') {
-    filteredPosts.sort(
-      (a, b) => (b._count?.reactions || 0) - (a._count?.reactions || 0),
-    );
-  } else if (selectedFilter === 'comments') {
-    filteredPosts.sort(
-      (a, b) => (b._count?.comments || 0) - (a._count?.comments || 0),
+  } else if (selectedFilter === 'title') {
+    filteredPosts.sort((a, b) =>
+      a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }),
     );
   }
 
   renderFeedPosts(filteredPosts);
-  handleSearch(searchInput, noResults, loadMoreBtn); // Behold søk etter filterendring
+  handleSearch(searchInput, noResults, loadMoreBtn);
 });
 
-// create post button
-const toggleBtn = document.getElementById('createPostBtn');
-const postForm = document.getElementById('postForm');
+export function openPostModal(post) {
+  const modal = document.getElementById('post-modal');
+  const overlay = document.getElementById('post-modal-overlay');
+  const content = document.getElementById('post-modal-content');
 
-toggleBtn.addEventListener('click', () => {
-  postForm.classList.toggle('hidden');
-});
+  content.innerHTML = `
+    <div class="mb-2">
+      <h2 class="text-xl font-bold">${post.title}</h2>
+      <p class="text-sm text-gray-500">${post.created.split('T')[0]} by @${post.author.name}</p>
+    </div>
+    <img src="${post.media?.url || fallbackImage}" alt="${post.media?.alt || 'Post image'}" class="w-full object-cover rounded-md mb-3">
+    <p class="text-gray-800 whitespace-pre-wrap">${post.body}</p>
+    ${post.tags?.length ? `<div class="mt-2 text-sm text-gray-600">Tags: ${post.tags.join(', ')}</div>` : ''}
+  `;
 
-const submitBtn = document.getElementById('submitPostBtn');
-
-submitBtn.addEventListener('click', async (event) => {
-  event.preventDefault();
-
-  // Get values from the form fields
-  const title = document.getElementById('postTitle').value.trim();
-  const body = document.getElementById('postBody').value.trim();
-  let mediaUrl = document.getElementById('postImageUrl').value.trim();
-
-  // Fallback-verdier hvis feltene er tomme
-  title ? title : (title = 'Ingen tittel');
-  body ? body : (body = 'Ingen beskrivelse');
-  mediaUrl ? mediaUrl : (mediaUrl = 'https://example.com/default-image.jpg'); // Fallback-bilde
-  if (!mediaUrl.startsWith('http')) {
-    // Sjekk om URL-en er gyldig
-    mediaUrl = 'https://example.com/default-image.jpg'; // Fallback-bilde
-  }
-
-  // Validering av feltene
-  const postData = {
-    title: title,
-    body: body,
-    media: {
-      url: mediaUrl,
-      alt: 'Bilde',
-    },
-  };
-
-  try {
-    const respone = await fetch(`${feedUrl}`, {
-      method: 'POST',
-      headers: defaultHeaders,
-      body: JSON.stringify(postData),
-    });
-    if (!respone.ok) {
-      throw new Error('Feil ved oppretting av innlegg');
-    }
-
-    const data = await respone.json();
-    console.log('Innlegg opprettet:', data);
-
-    // Lukk skjemaet og tøm feltene
-    postForm.classList.add('hidden');
-    document.getElementById('postTitle').value = '';
-    document.getElementById('postBody').value = '';
-    document.getElementById('postImageUrl').value = '';
-    allPosts.unshift(data); // Legg til det nye innlegget i begynnelsen av listen
-
-    window.location.reload(); // Last inn siden på nytt for å vise det nye innlegget
-  } catch (error) {
-    console.error('Feil ved oppretting av innlegg:', error);
-  }
-});
+  modal.classList.remove('hidden');
+  overlay.classList.remove('hidden');
+}
