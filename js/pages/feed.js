@@ -118,3 +118,22 @@ filterSelect.addEventListener('change', (event) => {
   renderFeedPosts(filteredPosts);
   handleSearch(searchInput, noResults, loadMoreBtn);
 });
+
+export function openPostModal(post) {
+  const modal = document.getElementById('post-modal');
+  const overlay = document.getElementById('post-modal-overlay');
+  const content = document.getElementById('post-modal-content');
+
+  content.innerHTML = `
+    <div class="mb-2">
+      <h2 class="text-xl font-bold">${post.title}</h2>
+      <p class="text-sm text-gray-500">${post.created.split('T')[0]} by @${post.author.name}</p>
+    </div>
+    <img src="${post.media?.url || fallbackImage}" alt="${post.media?.alt || 'Post image'}" class="w-full object-cover rounded-md mb-3">
+    <p class="text-gray-800 whitespace-pre-wrap">${post.body}</p>
+    ${post.tags?.length ? `<div class="mt-2 text-sm text-gray-600">Tags: ${post.tags.join(', ')}</div>` : ''}
+  `;
+
+  modal.classList.remove('hidden');
+  overlay.classList.remove('hidden');
+}
