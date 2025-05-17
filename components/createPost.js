@@ -96,7 +96,7 @@ export function initCreatePost(renderPosts, postsToRender) {
         const errorData = await response.json();
         const errorMessage =
           errorData.errors?.[0]?.message || 'Failed to create post';
-        handleError(errorMessage, 'default');
+        handleError(null, errorMessage, 'danger');
         return;
       }
 
@@ -106,6 +106,13 @@ export function initCreatePost(renderPosts, postsToRender) {
       renderPosts(postsToRender);
       resetForm();
       handleFeedback('New post created successfully!', 'success');
+
+      function resetCreatePostButton() {
+        createPostBtn.classList.remove('bg-red-500', 'hover:bg-red-600');
+        createPostBtn.innerHTML =
+          '<i class="fa-solid fa-plus font-semibold text-2xl"></i>';
+      }
+      resetCreatePostButton();
       closeForm();
     } catch (error) {
       console.error('Error creating post:', error);
