@@ -1,6 +1,7 @@
 import { handleError } from '../handlers/errorHandler.js';
 import { fallbackImage } from '../../components/fallbackImage.js';
 import { openEditPopup } from '../handlers/editPostHandlers.js';
+import { openPostModal } from '../handlers/postModal.js';
 
 const profileData = JSON.parse(localStorage.getItem('profileData'));
 const profileName = profileData?.name;
@@ -28,12 +29,12 @@ const profileName = profileData?.name;
 export function createPostCard(post) {
   const card = document.createElement('div');
   card.className =
-    'post-card bg-white w-full sm:w-60 rounded-2xl shadow-md overflow-hidden transition-shadow hover:shadow-lg duration-200';
+    'post-card bg-white w-full sm:w-60 rounded-2xl shadow-md overflow-hidden transition-shadow border-4 hover:border-green-400 p-2 transition-transform duration-300 hover:scale-105 cursor-pointer  hover:shadow-lg duration-200';
 
   // Top row containing profile image, link, and post date
   const topRow = document.createElement('div');
   topRow.className =
-    'bg-white rounded-t-md p-2 flex justify-between items-center text-xs';
+    'bg-white rounded-t-md p-2 flex justify-between items-center text-xs hover';
 
   // Profile image element
   const profileImg = document.createElement('img');
@@ -86,7 +87,7 @@ export function createPostCard(post) {
   titleWrapper.className = 'bg-gray-100 px-2 py-1 text-center';
   const title = document.createElement('h3');
   title.className =
-    'text-sm font-bold text-gray-800 truncate group-hover:text-green-400 transition-colors';
+    'text-sm font-bold text-gray-800 truncate group-hover:text-green-400 transition-colors max-h-6 overflow-hidden text-ellipsis whitespace-nowrap';
 
   const maxTitleLength = 25; // Maximum title length
   const maxBodyLength = 250; // Maximum body length
@@ -112,21 +113,26 @@ export function createPostCard(post) {
   // Bottom content with post body snippet
   const bottom = document.createElement('div');
   bottom.className =
-    'bg-white py-1 rounded-b-md h-36 flex flex-col justify-between';
+    'bg-white py-1 rounded-b-md h-16 flex flex-col justify-between';
 
   const textWrapper = document.createElement('div');
   textWrapper.className = 'flex flex-row w-full justify-start items-center';
 
   const paragraph = document.createElement('p');
   paragraph.className =
-    'break-all text-[12px] px-1 py-1 text-gray-700 break-words whitespace-normal w-full';
+    'break-all text-[12px] px-1 py-1 text-gray-700 whitespace-normal w-full overflow-hidden text-ellipsis line-clamp-3';
 
   const userSpan = document.createElement('span');
   userSpan.className = 'pr-1 font-bold';
   userSpan.textContent = `@${post.author?.name || 'user'}:`;
-  const postText = document.createTextNode(
-    post.body.slice(0, maxBodyLength).trim() + '…' || '',
-  );
+
+  let trimmedBody = post.body.trim();
+  let displayText =
+    trimmedBody.length > maxBodyLength
+      ? trimmedBody.slice(0, maxBodyLength) + '…'
+      : trimmedBody;
+
+  const postText = document.createTextNode(displayText);
 
   paragraph.appendChild(userSpan);
   paragraph.appendChild(postText);
@@ -146,6 +152,13 @@ export function createPostCard(post) {
   card.dataset.tags = (post.tags || []).join(',');
   card.dataset.author = post.author?.name || '';
   card.dataset.created = post.created || '';
+
+  card.addEventListener('click', (event) => {
+    // Hindre at klikk på edit-knappen åpner modal
+    if (event.target.closest('.edit-button')) return;
+
+    openPostModal(post);
+  });
 
   return card;
 }
