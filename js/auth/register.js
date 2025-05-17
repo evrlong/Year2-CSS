@@ -126,7 +126,7 @@ submitButton.addEventListener('click', async (event) => {
   const isNameValid = validateInput(nameInput, usernameMessage, 3, 'username');
 
   const emailValue = emailInput.value.trim().toLowerCase();
-  const isEmailValid = validateInput(emailInput, emailMessage, 15, 'email');
+  const isEmailValid = validateInput(emailInput, emailMessage, 11, 'email');
 
   const isPasswordValid = validateInput(
     passwordInput,
