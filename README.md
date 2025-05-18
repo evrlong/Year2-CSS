@@ -24,6 +24,7 @@ A easy and modern social media site where users can log in, follow others, and s
 
 - [Trello Board](https://trello.com/b/nOh7oqWB/js2-assignment)
 - [Live Demo on Netlify](https://evrlong-some.netlify.app/)
+- [JSDocs](https://evrlong.github.io/Year2-CSS/index.html)
 
 ## Getting Started
 
