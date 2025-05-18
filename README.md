@@ -4,8 +4,11 @@ A easy and modern social media site where users can log in, follow others, and s
 
 ## Features
 
+- **Create user:** Register a new account with name, email, password and avatar
 - **User login:** Log in to access the site.
 - **View others’ posts:** Browse and read posts from other users.
+- **Search posts:** Search posts posted on this platform
+- **Sort posts:** Alphabetically or by date
 - **Follow users:** Follow other users to stay updated on their posts.
 - **Create posts:** Write and publish your own posts.
 - **Edit posts:** Modify your own posts.
@@ -21,13 +24,17 @@ A easy and modern social media site where users can log in, follow others, and s
 
 - [Trello Board](https://trello.com/b/nOh7oqWB/js2-assignment)
 - [Live Demo on Netlify](https://evrlong-some.netlify.app/)
+- [JSDocs](https://evrlong.github.io/Year2-CSS/index.html)
 
 ## Getting Started
 
-1. Clone this repository:
-   ```bash
-   git clone <your-repo-url>
-   ```
+Clone the whole repo
+
+```bash
+git clone https://github.com/evrlong/Year2-CSS.git
+cd Year2-CSS
+git checkout js2
+```
 
 ## Install Dependencies
 
@@ -54,8 +61,6 @@ To build the project for production, use:
 ```bash
 npm run build
 ```
-
-The optimized files will be generated in the `dist` folder.
 
 ## License
 
