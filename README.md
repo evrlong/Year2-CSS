@@ -24,10 +24,13 @@ A easy and modern social media site where users can log in, follow others, and s
 
 ## Getting Started
 
-1. Clone this repository:
-   ```bash
-   git clone <your-repo-url>
-   ```
+Clone the whole repo
+
+```bash
+git clone https://github.com/evrlong/Year2-CSS.git
+cd Year2-CSS
+git checkout js2
+```
 
 ## Install Dependencies
 
@@ -54,8 +57,6 @@ To build the project for production, use:
 ```bash
 npm run build
 ```
-
-The optimized files will be generated in the `dist` folder.
 
 ## License
 
