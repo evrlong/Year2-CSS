@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: js/utils/searchbar.js</title>
+    <title>JSDoc: Source: js/utils/handlers/postModal.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: js/utils/searchbar.js</h1>
+    <h1 class="page-title">Source: js/utils/handlers/postModal.js</h1>
 
     
 
@@ -27,68 +27,56 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Filters and displays post cards based on the search input value.
- * Shows or hides the "No results" message and "Load More" button accordingly.
+ * Opens a modal displaying the details of a given post.
  *
- * @param {HTMLInputElement} searchInput - The input element where the user types the search term.
- * @param {HTMLElement} noResults - The element that displays when no results are found.
- * @param {HTMLElement} loadMoreBtn - The "Load More" button element to show or hide.
+ * @param {Object} post - The post object containing details to display in the modal.
+ * @param {string} post.title - The title of the post.
+ * @param {string} [post.created] - The creation date of the post in ISO format.
+ * @param {Object} [post.media] - The media object associated with the post.
+ * @param {string} [post.media.url] - The URL of the post's media image.
+ * @param {string} [post.media.alt] - The alt text for the post's media image.
+ * @param {Object} [post.author] - The author object of the post.
+ * @param {string} [post.author.name] - The name of the post's author.
+ * @param {string} post.body - The main content/body of the post.
  */
-export function handleSearch(searchInput, noResults, loadMoreBtn) {
-  const searchTerm = searchInput.value.toLowerCase();
-  const postCards = document.querySelectorAll('.post-card'); // Select all post cards
-  const postContainer = document.getElementById('postContainer');
+export function openPostModal(post) {
+  const modal = document.createElement('div');
+  modal.className =
+    'fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center z-50 p-4';
 
-  postCards.forEach((card) => {
-    const title = card.dataset.title?.toLowerCase() || '';
-    const body = card.dataset.body?.toLowerCase() || '';
-    const tags = card.dataset.tags?.toLowerCase() || '';
-    const author = card.dataset.author?.toLowerCase() || '';
-    const created = card.dataset.created?.toLowerCase() || '';
+  const content = document.createElement('div');
+  content.className =
+    'bg-white p-8 rounded-3xl max-w-lg w-full shadow-2xl flex flex-col items-center border-4 border-green-400';
 
-    const match =
-      title.includes(searchTerm) ||
-      body.includes(searchTerm) ||
-      tags.includes(searchTerm) ||
-      author.includes(searchTerm) ||
-      created.includes(searchTerm);
+  content.innerHTML = `
+    &lt;h2 class=" text-xl font-extrabold mb-1 text-gray-900">${post.title}&lt;/h2>
+    &lt;p class="text-sm text-gray-500 mb-6">${post.created ? post.created.split('T')[0] : ''}&lt;/p>
+    &lt;img src="${post.media?.url || fallbackImage}" alt="${post.media?.alt || 'Post image'}" class="w-full mb-6 rounded-xl shadow-md object-cover max-h-96"/>
+    
+    &lt;p class="text-gray-700 text-base whitespace-pre-line mb-6">&lt;span class="pr-1 font-bold">@${post.author?.name || 'Unknown'}:&lt;/span>${post.body}&lt;/p>
+  `;
 
-    card.style.display = match ? 'block' : 'none';
+  const closeButton = document.createElement('button');
+  closeButton.className =
+    'bg-red-500 hover:bg-red-700 transition-colors duration-300 ease-in-out text-white rounded-full px-5 py-3 shadow-lg focus:outline-none active:scale-95';
+
+  closeButton.innerHTML = `&lt;i class="fa-solid fa-xmark text-lg">&lt;/i>`;
+
+  closeButton.setAttribute('aria-label', 'Lukk modal');
+
+  content.appendChild(closeButton);
+  modal.appendChild(content);
+  document.body.appendChild(modal);
+
+  modal.addEventListener('click', (e) => {
+    if (
+      e.target === modal ||
+      e.target === closeButton ||
+      e.target.closest('button') === closeButton
+    ) {
+      modal.remove();
+    }
   });
-
-  const visibleCards = Array.from(postCards).filter(
-    (card) => card.style.display !== 'none',
-  );
-
-  const hasResults = visibleCards.length > 0;
-  const showLoadMore = visibleCards.length >= 20;
-
-  if (hasResults &amp;&amp; showLoadMore) {
-    loadMoreBtn.classList.remove('hidden');
-    loadMoreBtn.classList.add('block');
-  } else {
-    loadMoreBtn.classList.add('hidden');
-    loadMoreBtn.classList.remove('block');
-  }
-
-  // Toggle visibility of no results message and post container
-  noResults.classList.toggle('hidden', hasResults);
-  postContainer.classList.toggle('hidden', !hasResults);
-}
-
-/**
- * Creates a debounced version of a function that delays its execution until after a wait time has elapsed.
- *
- * @param {Function} func - The function to debounce.
- * @param {number} delay - The delay time in milliseconds.
- * @returns {Function} A debounced version of the input function.
- */
-export function debounce(func, delay) {
-  let timeout;
-  return function (...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), delay);
-  };
 }
 </code></pre>
         </article>

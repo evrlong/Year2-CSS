@@ -29,6 +29,7 @@
             <pre class="prettyprint source linenums"><code>import { handleError } from '../handlers/errorHandler.js';
 import { fallbackImage } from '../../components/fallbackImage.js';
 import { openEditPopup } from '../handlers/editPostHandlers.js';
+import { openPostModal } from '../handlers/postModal.js';
 
 const profileData = JSON.parse(localStorage.getItem('profileData'));
 const profileName = profileData?.name;
@@ -56,12 +57,12 @@ const profileName = profileData?.name;
 export function createPostCard(post) {
   const card = document.createElement('div');
   card.className =
-    'post-card bg-white w-full sm:w-60 rounded-2xl shadow-md overflow-hidden transition-shadow hover:shadow-lg duration-200';
+    'post-card bg-white w-full sm:w-60 rounded-2xl shadow-md overflow-hidden transition-shadow border-4 hover:border-green-400 p-2 transition-transform duration-300 hover:scale-105 cursor-pointer  hover:shadow-lg duration-200';
 
   // Top row containing profile image, link, and post date
   const topRow = document.createElement('div');
   topRow.className =
-    'bg-white rounded-t-md p-2 flex justify-between items-center text-xs';
+    'bg-white rounded-t-md p-2 flex justify-between items-center text-xs hover';
 
   // Profile image element
   const profileImg = document.createElement('img');
@@ -114,7 +115,7 @@ export function createPostCard(post) {
   titleWrapper.className = 'bg-gray-100 px-2 py-1 text-center';
   const title = document.createElement('h3');
   title.className =
-    'text-sm font-bold text-gray-800 truncate group-hover:text-green-400 transition-colors';
+    'text-sm font-bold text-gray-800 truncate group-hover:text-green-400 transition-colors max-h-6 overflow-hidden text-ellipsis whitespace-nowrap';
 
   const maxTitleLength = 25; // Maximum title length
   const maxBodyLength = 250; // Maximum body length
@@ -140,21 +141,26 @@ export function createPostCard(post) {
   // Bottom content with post body snippet
   const bottom = document.createElement('div');
   bottom.className =
-    'bg-white py-1 rounded-b-md h-36 flex flex-col justify-between';
+    'bg-white py-1 rounded-b-md h-16 flex flex-col justify-between';
 
   const textWrapper = document.createElement('div');
   textWrapper.className = 'flex flex-row w-full justify-start items-center';
 
   const paragraph = document.createElement('p');
   paragraph.className =
-    'break-all text-[12px] px-1 py-1 text-gray-700 break-words whitespace-normal w-full';
+    'break-all text-[12px] px-1 py-1 text-gray-700 whitespace-normal w-full overflow-hidden text-ellipsis line-clamp-3';
 
   const userSpan = document.createElement('span');
   userSpan.className = 'pr-1 font-bold';
   userSpan.textContent = `@${post.author?.name || 'user'}:`;
-  const postText = document.createTextNode(
-    post.body.slice(0, maxBodyLength).trim() + '…' || '',
-  );
+
+  let trimmedBody = post.body.trim();
+  let displayText =
+    trimmedBody.length > maxBodyLength
+      ? trimmedBody.slice(0, maxBodyLength) + '…'
+      : trimmedBody;
+
+  const postText = document.createTextNode(displayText);
 
   paragraph.appendChild(userSpan);
   paragraph.appendChild(postText);
@@ -175,6 +181,13 @@ export function createPostCard(post) {
   card.dataset.author = post.author?.name || '';
   card.dataset.created = post.created || '';
 
+  card.addEventListener('click', (event) => {
+    // Hindre at klikk på edit-knappen åpner modal
+    if (event.target.closest('.edit-button')) return;
+
+    openPostModal(post);
+  });
+
   return card;
 }
 </code></pre>
@@ -187,13 +200,13 @@ export function createPostCard(post) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-fetch.html">fetch</a></li><li><a href="module-login.html">login</a></li><li><a href="module-register.html">register</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:DOMContentLoaded">DOMContentLoaded</a></li></ul><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#addCreateToHtml">addCreateToHtml</a></li><li><a href="global.html#addLogoutListeners">addLogoutListeners</a></li><li><a href="global.html#apiKey">apiKey</a></li><li><a href="global.html#checkIfFollowing">checkIfFollowing</a></li><li><a href="global.html#closeForm">closeForm</a></li><li><a href="global.html#createFollowerCard">createFollowerCard</a></li><li><a href="global.html#createFollowingCard">createFollowingCard</a></li><li><a href="global.html#createPostCard">createPostCard</a></li><li><a href="global.html#debounce">debounce</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#getDefaultHeaders">getDefaultHeaders</a></li><li><a href="global.html#getPostData">getPostData</a></li><li><a href="global.html#getPostUrl">getPostUrl</a></li><li><a href="global.html#handleError">handleError</a></li><li><a href="global.html#handleFeedback">handleFeedback</a></li><li><a href="global.html#handleSearch">handleSearch</a></li><li><a href="global.html#initCreatePost">initCreatePost</a></li><li><a href="global.html#isLoggedIn">isLoggedIn</a></li><li><a href="global.html#loadEditPost">loadEditPost</a></li><li><a href="global.html#loadFooter">loadFooter</a></li><li><a href="global.html#loadNavbar">loadNavbar</a></li><li><a href="global.html#logOut">logOut</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#openEditPopup">openEditPopup</a></li><li><a href="global.html#renderFeedPosts">renderFeedPosts</a></li><li><a href="global.html#renderFollowers">renderFollowers</a></li><li><a href="global.html#renderFollowing">renderFollowing</a></li><li><a href="global.html#renderProfileData">renderProfileData</a></li><li><a href="global.html#resetForm">resetForm</a></li><li><a href="global.html#setupEditPostHandlers">setupEditPostHandlers</a></li><li><a href="global.html#setupInputCounter">setupInputCounter</a></li><li><a href="global.html#setupMenuToggle">setupMenuToggle</a></li><li><a href="global.html#toggleVisibility">toggleVisibility</a></li><li><a href="global.html#updateFollowButton">updateFollowButton</a></li><li><a href="global.html#updateNavbar">updateNavbar</a></li><li><a href="global.html#validateConfirmPassword">validateConfirmPassword</a></li><li><a href="global.html#validateInput">validateInput</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-fetch.html">fetch</a></li><li><a href="module-login.html">login</a></li><li><a href="module-register.html">register</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:DOMContentLoaded">DOMContentLoaded</a></li></ul><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#addCreateToHtml">addCreateToHtml</a></li><li><a href="global.html#addLogoutListeners">addLogoutListeners</a></li><li><a href="global.html#apiKey">apiKey</a></li><li><a href="global.html#checkIfFollowing">checkIfFollowing</a></li><li><a href="global.html#closeForm">closeForm</a></li><li><a href="global.html#createFollowerCard">createFollowerCard</a></li><li><a href="global.html#createFollowingCard">createFollowingCard</a></li><li><a href="global.html#createPostCard">createPostCard</a></li><li><a href="global.html#debounce">debounce</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#getDefaultHeaders">getDefaultHeaders</a></li><li><a href="global.html#getPostData">getPostData</a></li><li><a href="global.html#getPostUrl">getPostUrl</a></li><li><a href="global.html#handleError">handleError</a></li><li><a href="global.html#handleFeedback">handleFeedback</a></li><li><a href="global.html#handleSearch">handleSearch</a></li><li><a href="global.html#initCreatePost">initCreatePost</a></li><li><a href="global.html#isLoggedIn">isLoggedIn</a></li><li><a href="global.html#loadEditPost">loadEditPost</a></li><li><a href="global.html#loadFooter">loadFooter</a></li><li><a href="global.html#loadNavbar">loadNavbar</a></li><li><a href="global.html#logOut">logOut</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#openEditPopup">openEditPopup</a></li><li><a href="global.html#openPostModal">openPostModal</a></li><li><a href="global.html#renderFeedPosts">renderFeedPosts</a></li><li><a href="global.html#renderFollowers">renderFollowers</a></li><li><a href="global.html#renderFollowing">renderFollowing</a></li><li><a href="global.html#renderProfileData">renderProfileData</a></li><li><a href="global.html#resetForm">resetForm</a></li><li><a href="global.html#setupEditPostHandlers">setupEditPostHandlers</a></li><li><a href="global.html#setupInputCounter">setupInputCounter</a></li><li><a href="global.html#setupMenuToggle">setupMenuToggle</a></li><li><a href="global.html#toggleVisibility">toggleVisibility</a></li><li><a href="global.html#updateFollowButton">updateFollowButton</a></li><li><a href="global.html#updateNavbar">updateNavbar</a></li><li><a href="global.html#validateConfirmPassword">validateConfirmPassword</a></li><li><a href="global.html#validateInput">validateInput</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri May 16 2025 23:34:35 GMT+0200 (sentraleuropeisk sommertid)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun May 18 2025 11:15:05 GMT+0200 (sentraleuropeisk sommertid)
 </footer>
 
 <script> prettyPrint(); </script>
