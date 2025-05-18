@@ -1,3 +1,16 @@
+/**
+ * Opens a modal displaying the details of a given post.
+ *
+ * @param {Object} post - The post object containing details to display in the modal.
+ * @param {string} post.title - The title of the post.
+ * @param {string} [post.created] - The creation date of the post in ISO format.
+ * @param {Object} [post.media] - The media object associated with the post.
+ * @param {string} [post.media.url] - The URL of the post's media image.
+ * @param {string} [post.media.alt] - The alt text for the post's media image.
+ * @param {Object} [post.author] - The author object of the post.
+ * @param {string} [post.author.name] - The name of the post's author.
+ * @param {string} post.body - The main content/body of the post.
+ */
 export function openPostModal(post) {
   const modal = document.createElement('div');
   modal.className =
