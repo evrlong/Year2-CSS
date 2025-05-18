@@ -4,8 +4,11 @@ A easy and modern social media site where users can log in, follow others, and s
 
 ## Features
 
+- **Create user:** Register a new account with name, email, password and avatar
 - **User login:** Log in to access the site.
 - **View others’ posts:** Browse and read posts from other users.
+- **Search posts:** Search posts posted on this platform
+- **Sort posts:** Alphabetically or by date
 - **Follow users:** Follow other users to stay updated on their posts.
 - **Create posts:** Write and publish your own posts.
 - **Edit posts:** Modify your own posts.
