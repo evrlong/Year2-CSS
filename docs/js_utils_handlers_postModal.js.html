@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: js/utils/handlers/postModal.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: js/utils/handlers/postModal.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Opens a modal displaying the details of a given post.
+ *
+ * @param {Object} post - The post object containing details to display in the modal.
+ * @param {string} post.title - The title of the post.
+ * @param {string} [post.created] - The creation date of the post in ISO format.
+ * @param {Object} [post.media] - The media object associated with the post.
+ * @param {string} [post.media.url] - The URL of the post's media image.
+ * @param {string} [post.media.alt] - The alt text for the post's media image.
+ * @param {Object} [post.author] - The author object of the post.
+ * @param {string} [post.author.name] - The name of the post's author.
+ * @param {string} post.body - The main content/body of the post.
+ */
+export function openPostModal(post) {
+  const modal = document.createElement('div');
+  modal.className =
+    'fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center z-50 p-4';
+
+  const content = document.createElement('div');
+  content.className =
+    'bg-white p-8 rounded-3xl max-w-lg w-full shadow-2xl flex flex-col items-center border-4 border-green-400';
+
+  content.innerHTML = `
+    &lt;h2 class=" text-xl font-extrabold mb-1 text-gray-900">${post.title}&lt;/h2>
+    &lt;p class="text-sm text-gray-500 mb-6">${post.created ? post.created.split('T')[0] : ''}&lt;/p>
+    &lt;img src="${post.media?.url || fallbackImage}" alt="${post.media?.alt || 'Post image'}" class="w-full mb-6 rounded-xl shadow-md object-cover max-h-96"/>
+    
+    &lt;p class="text-gray-700 text-base whitespace-pre-line mb-6">&lt;span class="pr-1 font-bold">@${post.author?.name || 'Unknown'}:&lt;/span>${post.body}&lt;/p>
+  `;
+
+  const closeButton = document.createElement('button');
+  closeButton.className =
+    'bg-red-500 hover:bg-red-700 transition-colors duration-300 ease-in-out text-white rounded-full px-5 py-3 shadow-lg focus:outline-none active:scale-95';
+
+  closeButton.innerHTML = `&lt;i class="fa-solid fa-xmark text-lg">&lt;/i>`;
+
+  closeButton.setAttribute('aria-label', 'Lukk modal');
+
+  content.appendChild(closeButton);
+  modal.appendChild(content);
+  document.body.appendChild(modal);
+
+  modal.addEventListener('click', (e) => {
+    if (
+      e.target === modal ||
+      e.target === closeButton ||
+      e.target.closest('button') === closeButton
+    ) {
+      modal.remove();
+    }
+  });
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-fetch.html">fetch</a></li><li><a href="module-login.html">login</a></li><li><a href="module-register.html">register</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:DOMContentLoaded">DOMContentLoaded</a></li></ul><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#addCreateToHtml">addCreateToHtml</a></li><li><a href="global.html#addLogoutListeners">addLogoutListeners</a></li><li><a href="global.html#apiKey">apiKey</a></li><li><a href="global.html#checkIfFollowing">checkIfFollowing</a></li><li><a href="global.html#closeForm">closeForm</a></li><li><a href="global.html#createFollowerCard">createFollowerCard</a></li><li><a href="global.html#createFollowingCard">createFollowingCard</a></li><li><a href="global.html#createPostCard">createPostCard</a></li><li><a href="global.html#debounce">debounce</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#getDefaultHeaders">getDefaultHeaders</a></li><li><a href="global.html#getPostData">getPostData</a></li><li><a href="global.html#getPostUrl">getPostUrl</a></li><li><a href="global.html#handleError">handleError</a></li><li><a href="global.html#handleFeedback">handleFeedback</a></li><li><a href="global.html#handleSearch">handleSearch</a></li><li><a href="global.html#initCreatePost">initCreatePost</a></li><li><a href="global.html#isLoggedIn">isLoggedIn</a></li><li><a href="global.html#loadEditPost">loadEditPost</a></li><li><a href="global.html#loadFooter">loadFooter</a></li><li><a href="global.html#loadNavbar">loadNavbar</a></li><li><a href="global.html#logOut">logOut</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#openEditPopup">openEditPopup</a></li><li><a href="global.html#openPostModal">openPostModal</a></li><li><a href="global.html#renderFeedPosts">renderFeedPosts</a></li><li><a href="global.html#renderFollowers">renderFollowers</a></li><li><a href="global.html#renderFollowing">renderFollowing</a></li><li><a href="global.html#renderProfileData">renderProfileData</a></li><li><a href="global.html#resetForm">resetForm</a></li><li><a href="global.html#setupEditPostHandlers">setupEditPostHandlers</a></li><li><a href="global.html#setupInputCounter">setupInputCounter</a></li><li><a href="global.html#setupMenuToggle">setupMenuToggle</a></li><li><a href="global.html#toggleVisibility">toggleVisibility</a></li><li><a href="global.html#updateFollowButton">updateFollowButton</a></li><li><a href="global.html#updateNavbar">updateNavbar</a></li><li><a href="global.html#validateConfirmPassword">validateConfirmPassword</a></li><li><a href="global.html#validateInput">validateInput</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun May 18 2025 11:15:05 GMT+0200 (sentraleuropeisk sommertid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

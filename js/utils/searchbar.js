@@ -1,6 +1,15 @@
+/**
+ * Filters and displays post cards based on the search input value.
+ * Shows or hides the "No results" message and "Load More" button accordingly.
+ *
+ * @param {HTMLInputElement} searchInput - The input element where the user types the search term.
+ * @param {HTMLElement} noResults - The element that displays when no results are found.
+ * @param {HTMLElement} loadMoreBtn - The "Load More" button element to show or hide.
+ */
 export function handleSearch(searchInput, noResults, loadMoreBtn) {
   const searchTerm = searchInput.value.toLowerCase();
-  const postCards = document.querySelectorAll('.post-card'); // Hent oppdatert liste
+  const postCards = document.querySelectorAll('.post-card'); // Select all post cards
+  const postContainer = document.getElementById('postContainer');
 
   postCards.forEach((card) => {
     const title = card.dataset.title?.toLowerCase() || '';
@@ -23,28 +32,29 @@ export function handleSearch(searchInput, noResults, loadMoreBtn) {
     (card) => card.style.display !== 'none',
   );
 
-  // Skjul "No results" hvis det er noen visbare innlegg
-  noResults.classList.toggle('hidden', visibleCards.length > 0);
+  const hasResults = visibleCards.length > 0;
+  const showLoadMore = visibleCards.length >= 20;
 
-  // Deaktiver "Last mer"-knappen hvis det er færre enn limit visbare innlegg
-  updateLoadMoreButton(visibleCards.length, loadMoreBtn);
-}
-
-export function updateLoadMoreButton(visibleCardCount, loadMoreBtn) {
-  const pageLimit = 20;
-
-  if (visibleCardCount < pageLimit) {
-    console.log('Fewer than 20 posts visible:', visibleCardCount);
-    // Juster denne verdien for å matche 'limit'
-    loadMoreBtn.disabled = true;
-    loadMoreBtn.classList.add('hidden'); // Skjul knappen
-  } else {
-    console.log('20 or more posts visible:', visibleCardCount);
-    loadMoreBtn.disabled = false;
+  if (hasResults && showLoadMore) {
     loadMoreBtn.classList.remove('hidden');
+    loadMoreBtn.classList.add('block');
+  } else {
+    loadMoreBtn.classList.add('hidden');
+    loadMoreBtn.classList.remove('block');
   }
+
+  // Toggle visibility of no results message and post container
+  noResults.classList.toggle('hidden', hasResults);
+  postContainer.classList.toggle('hidden', !hasResults);
 }
 
+/**
+ * Creates a debounced version of a function that delays its execution until after a wait time has elapsed.
+ *
+ * @param {Function} func - The function to debounce.
+ * @param {number} delay - The delay time in milliseconds.
+ * @returns {Function} A debounced version of the input function.
+ */
 export function debounce(func, delay) {
   let timeout;
   return function (...args) {
